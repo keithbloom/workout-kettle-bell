@@ -1,0 +1,1002 @@
+{
+  "steps": [
+    {
+      "sec": 0,
+      "phase": "warmup",
+      "type": "prep",
+      "title": "Get ready",
+      "dur": 5,
+      "hint": "",
+      "round": "",
+      "sub": "Next: Cat-cow",
+      "details": [
+        {
+          "name": "Cat-cow",
+          "desc": "On hands and knees. Arch your back and lift your chest and tailbone, then round your spine and tuck your chin. Move with your breathing."
+        }
+      ],
+      "say": "Get ready. Next, Cat-cow"
+    },
+    {
+      "sec": 0,
+      "phase": "warmup",
+      "type": "reps",
+      "title": "Cat-cow",
+      "sub": "10 reps",
+      "round": "Move 1 of 4",
+      "est": 75,
+      "details": [
+        {
+          "name": "Cat-cow",
+          "desc": "On hands and knees. Arch your back and lift your chest and tailbone, then round your spine and tuck your chin. Move with your breathing."
+        }
+      ],
+      "lbl": "Cat-cow",
+      "say": "Cat-cow",
+      "nextText": "Next: Glute bridge"
+    },
+    {
+      "sec": 0,
+      "phase": "warmup",
+      "type": "reps",
+      "title": "Glute bridge",
+      "sub": "10 reps",
+      "round": "Move 2 of 4",
+      "est": 75,
+      "details": [
+        {
+          "name": "Glute bridge",
+          "desc": "Lie on your back, knees bent, feet flat and hip-width apart. Push through your heels to lift your hips until shoulders, hips and knees form a straight line. Squeeze your glutes at the top and lower slowly."
+        }
+      ],
+      "lbl": "Glute bridge",
+      "say": "Glute bridge",
+      "nextText": "Next: Bodyweight squat"
+    },
+    {
+      "sec": 0,
+      "phase": "warmup",
+      "type": "reps",
+      "title": "Bodyweight squat",
+      "sub": "10 reps",
+      "round": "Move 3 of 4",
+      "est": 75,
+      "details": [
+        {
+          "name": "Bodyweight squat",
+          "desc": "Feet shoulder-width apart. Sit your hips back and down, keeping your chest up and knees tracking over your toes. Stand tall."
+        }
+      ],
+      "lbl": "Bodyweight squat",
+      "say": "Bodyweight squat",
+      "nextText": "Next: Inchworm"
+    },
+    {
+      "sec": 0,
+      "phase": "warmup",
+      "type": "reps",
+      "title": "Inchworm",
+      "sub": "5 reps",
+      "round": "Move 4 of 4",
+      "est": 75,
+      "details": [
+        {
+          "name": "Inchworm",
+          "desc": "Stand, then hinge forward and walk your hands out to a high plank. Pause, walk your feet toward your hands, then stand back up."
+        }
+      ],
+      "lbl": "Inchworm",
+      "say": "Inchworm",
+      "nextText": "Next: Goblet squat"
+    },
+    {
+      "sec": 1,
+      "phase": "strength",
+      "type": "prep",
+      "title": "Get ready",
+      "dur": 10,
+      "hint": "Pick up your heavier bell.",
+      "round": "",
+      "sub": "Next: Goblet squat",
+      "details": [
+        {
+          "name": "Goblet squat",
+          "desc": "Hold the bell at your chest by the horns, elbows tucked in. Squat as deep as you can with your chest tall, then drive up through your heels."
+        }
+      ],
+      "say": "Get ready. Next, Goblet squat"
+    },
+    {
+      "sec": 1,
+      "phase": "strength",
+      "type": "work",
+      "title": "Goblet squat",
+      "sub": "45 seconds",
+      "dur": 45,
+      "round": "Round 1 of 2",
+      "details": [
+        {
+          "name": "Goblet squat",
+          "desc": "Hold the bell at your chest by the horns, elbows tucked in. Squat as deep as you can with your chest tall, then drive up through your heels."
+        }
+      ],
+      "lbl": "Goblet squat",
+      "say": "Goblet squat",
+      "half": "",
+      "nextText": "Next: Bent-over row"
+    },
+    {
+      "sec": 1,
+      "phase": "strength",
+      "type": "rest",
+      "title": "Rest",
+      "dur": 15,
+      "hint": "",
+      "round": "Round 1 of 2",
+      "sub": "Next: Bent-over row",
+      "details": [
+        {
+          "name": "Bent-over row",
+          "desc": "Hinge at the hips with a flat back, bell in one hand and free hand on your thigh. Pull the bell to your hip, squeezing your shoulder blade, then lower under control. Switch arms halfway."
+        }
+      ],
+      "say": "Rest. Next, Bent-over row"
+    },
+    {
+      "sec": 1,
+      "phase": "strength",
+      "type": "work",
+      "title": "Bent-over row",
+      "sub": "45 seconds, switch arms halfway",
+      "dur": 45,
+      "round": "Round 1 of 2",
+      "details": [
+        {
+          "name": "Bent-over row",
+          "desc": "Hinge at the hips with a flat back, bell in one hand and free hand on your thigh. Pull the bell to your hip, squeezing your shoulder blade, then lower under control. Switch arms halfway."
+        }
+      ],
+      "lbl": "Bent-over row",
+      "say": "Bent-over row",
+      "half": "Switch arms",
+      "nextText": "Next: Romanian deadlift"
+    },
+    {
+      "sec": 1,
+      "phase": "strength",
+      "type": "rest",
+      "title": "Rest",
+      "dur": 15,
+      "hint": "",
+      "round": "Round 1 of 2",
+      "sub": "Next: Romanian deadlift",
+      "details": [
+        {
+          "name": "Romanian deadlift",
+          "desc": "Hold the bell in front of your thighs with soft knees. Push your hips back and slide the bell down your legs until you feel a hamstring stretch, back flat. Drive your hips forward to stand."
+        }
+      ],
+      "say": "Rest. Next, Romanian deadlift"
+    },
+    {
+      "sec": 1,
+      "phase": "strength",
+      "type": "work",
+      "title": "Romanian deadlift",
+      "sub": "45 seconds",
+      "dur": 45,
+      "round": "Round 1 of 2",
+      "details": [
+        {
+          "name": "Romanian deadlift",
+          "desc": "Hold the bell in front of your thighs with soft knees. Push your hips back and slide the bell down your legs until you feel a hamstring stretch, back flat. Drive your hips forward to stand."
+        }
+      ],
+      "lbl": "Romanian deadlift",
+      "say": "Romanian deadlift",
+      "half": "",
+      "nextText": "Next: Floor press or overhead press"
+    },
+    {
+      "sec": 1,
+      "phase": "strength",
+      "type": "rest",
+      "title": "Rest",
+      "dur": 15,
+      "hint": "",
+      "round": "Round 1 of 2",
+      "sub": "Next: Floor press or overhead press",
+      "details": [
+        {
+          "name": "Floor press or overhead press",
+          "desc": "Floor press: lie on your back, knees bent, elbow resting on the floor, and press the bell straight up. Overhead press: stand, and press from shoulder to overhead with ribs down. Switch arms halfway."
+        }
+      ],
+      "say": "Rest. Next, Floor press or overhead press"
+    },
+    {
+      "sec": 1,
+      "phase": "strength",
+      "type": "work",
+      "title": "Floor press or overhead press",
+      "sub": "45 seconds, switch arms halfway",
+      "dur": 45,
+      "round": "Round 1 of 2",
+      "details": [
+        {
+          "name": "Floor press or overhead press",
+          "desc": "Floor press: lie on your back, knees bent, elbow resting on the floor, and press the bell straight up. Overhead press: stand, and press from shoulder to overhead with ribs down. Switch arms halfway."
+        }
+      ],
+      "lbl": "Floor press or overhead press",
+      "say": "Floor press or overhead press",
+      "half": "Switch arms",
+      "nextText": "Next: Goblet squat"
+    },
+    {
+      "sec": 1,
+      "phase": "strength",
+      "type": "rest",
+      "title": "Rest",
+      "dur": 15,
+      "hint": "",
+      "round": "Round 1 of 2",
+      "sub": "Next: Goblet squat",
+      "details": [
+        {
+          "name": "Goblet squat",
+          "desc": "Hold the bell at your chest by the horns, elbows tucked in. Squat as deep as you can with your chest tall, then drive up through your heels."
+        }
+      ],
+      "say": "Rest. Next, Goblet squat"
+    },
+    {
+      "sec": 1,
+      "phase": "strength",
+      "type": "work",
+      "title": "Goblet squat",
+      "sub": "45 seconds",
+      "dur": 45,
+      "round": "Round 2 of 2",
+      "details": [
+        {
+          "name": "Goblet squat",
+          "desc": "Hold the bell at your chest by the horns, elbows tucked in. Squat as deep as you can with your chest tall, then drive up through your heels."
+        }
+      ],
+      "lbl": "Goblet squat",
+      "say": "Goblet squat",
+      "half": "",
+      "nextText": "Next: Bent-over row"
+    },
+    {
+      "sec": 1,
+      "phase": "strength",
+      "type": "rest",
+      "title": "Rest",
+      "dur": 15,
+      "hint": "",
+      "round": "Round 2 of 2",
+      "sub": "Next: Bent-over row",
+      "details": [
+        {
+          "name": "Bent-over row",
+          "desc": "Hinge at the hips with a flat back, bell in one hand and free hand on your thigh. Pull the bell to your hip, squeezing your shoulder blade, then lower under control. Switch arms halfway."
+        }
+      ],
+      "say": "Rest. Next, Bent-over row"
+    },
+    {
+      "sec": 1,
+      "phase": "strength",
+      "type": "work",
+      "title": "Bent-over row",
+      "sub": "45 seconds, switch arms halfway",
+      "dur": 45,
+      "round": "Round 2 of 2",
+      "details": [
+        {
+          "name": "Bent-over row",
+          "desc": "Hinge at the hips with a flat back, bell in one hand and free hand on your thigh. Pull the bell to your hip, squeezing your shoulder blade, then lower under control. Switch arms halfway."
+        }
+      ],
+      "lbl": "Bent-over row",
+      "say": "Bent-over row",
+      "half": "Switch arms",
+      "nextText": "Next: Romanian deadlift"
+    },
+    {
+      "sec": 1,
+      "phase": "strength",
+      "type": "rest",
+      "title": "Rest",
+      "dur": 15,
+      "hint": "",
+      "round": "Round 2 of 2",
+      "sub": "Next: Romanian deadlift",
+      "details": [
+        {
+          "name": "Romanian deadlift",
+          "desc": "Hold the bell in front of your thighs with soft knees. Push your hips back and slide the bell down your legs until you feel a hamstring stretch, back flat. Drive your hips forward to stand."
+        }
+      ],
+      "say": "Rest. Next, Romanian deadlift"
+    },
+    {
+      "sec": 1,
+      "phase": "strength",
+      "type": "work",
+      "title": "Romanian deadlift",
+      "sub": "45 seconds",
+      "dur": 45,
+      "round": "Round 2 of 2",
+      "details": [
+        {
+          "name": "Romanian deadlift",
+          "desc": "Hold the bell in front of your thighs with soft knees. Push your hips back and slide the bell down your legs until you feel a hamstring stretch, back flat. Drive your hips forward to stand."
+        }
+      ],
+      "lbl": "Romanian deadlift",
+      "say": "Romanian deadlift",
+      "half": "",
+      "nextText": "Next: Floor press or overhead press"
+    },
+    {
+      "sec": 1,
+      "phase": "strength",
+      "type": "rest",
+      "title": "Rest",
+      "dur": 15,
+      "hint": "",
+      "round": "Round 2 of 2",
+      "sub": "Next: Floor press or overhead press",
+      "details": [
+        {
+          "name": "Floor press or overhead press",
+          "desc": "Floor press: lie on your back, knees bent, elbow resting on the floor, and press the bell straight up. Overhead press: stand, and press from shoulder to overhead with ribs down. Switch arms halfway."
+        }
+      ],
+      "say": "Rest. Next, Floor press or overhead press"
+    },
+    {
+      "sec": 1,
+      "phase": "strength",
+      "type": "work",
+      "title": "Floor press or overhead press",
+      "sub": "45 seconds, switch arms halfway",
+      "dur": 45,
+      "round": "Round 2 of 2",
+      "details": [
+        {
+          "name": "Floor press or overhead press",
+          "desc": "Floor press: lie on your back, knees bent, elbow resting on the floor, and press the bell straight up. Overhead press: stand, and press from shoulder to overhead with ribs down. Switch arms halfway."
+        }
+      ],
+      "lbl": "Floor press or overhead press",
+      "say": "Floor press or overhead press",
+      "half": "Switch arms",
+      "nextText": "Next: Round 1 of 4"
+    },
+    {
+      "sec": 2,
+      "phase": "endurance",
+      "type": "rest",
+      "title": "Rest",
+      "dur": 15,
+      "hint": "Switch to your lighter bell.",
+      "round": "",
+      "sub": "Next: Round 1 of 4",
+      "details": [
+        {
+          "name": "Kettlebell swing",
+          "desc": "Feet wider than shoulders, bell on the floor just ahead of you. Hinge, hike the bell back between your legs, then snap your hips forward to float it to chest height. The power comes from your hips, not your arms."
+        },
+        {
+          "name": "Reverse lunge",
+          "desc": "Hold the bell at your chest. Step one foot back and lower until the back knee nearly touches the floor, front shin vertical. Push through the front heel to return, then switch legs."
+        },
+        {
+          "name": "Push-up",
+          "desc": "Hands under shoulders, body in one straight line. Lower your chest toward the floor, then press back up. Drop to your knees if you need to."
+        }
+      ],
+      "say": "Rest. Next, Round 1 of 4"
+    },
+    {
+      "sec": 2,
+      "phase": "endurance",
+      "type": "emom",
+      "title": "Round 1 of 4",
+      "sub": "Tap each line when you finish it.",
+      "round": "A new round every 2 minutes",
+      "dur": 120,
+      "tasks": [
+        "20 kettlebell swings",
+        "10 reverse lunges (5 per leg)",
+        "5 push-ups"
+      ],
+      "details": [
+        {
+          "name": "Kettlebell swing",
+          "desc": "Feet wider than shoulders, bell on the floor just ahead of you. Hinge, hike the bell back between your legs, then snap your hips forward to float it to chest height. The power comes from your hips, not your arms."
+        },
+        {
+          "name": "Reverse lunge",
+          "desc": "Hold the bell at your chest. Step one foot back and lower until the back knee nearly touches the floor, front shin vertical. Push through the front heel to return, then switch legs."
+        },
+        {
+          "name": "Push-up",
+          "desc": "Hands under shoulders, body in one straight line. Lower your chest toward the floor, then press back up. Drop to your knees if you need to."
+        }
+      ],
+      "lbl": "Round 1 of 4",
+      "say": "Round 1",
+      "nextText": "Next: Round 2 of 4"
+    },
+    {
+      "sec": 2,
+      "phase": "endurance",
+      "type": "emom",
+      "title": "Round 2 of 4",
+      "sub": "Tap each line when you finish it.",
+      "round": "A new round every 2 minutes",
+      "dur": 120,
+      "tasks": [
+        "20 kettlebell swings",
+        "10 reverse lunges (5 per leg)",
+        "5 push-ups"
+      ],
+      "details": [
+        {
+          "name": "Kettlebell swing",
+          "desc": "Feet wider than shoulders, bell on the floor just ahead of you. Hinge, hike the bell back between your legs, then snap your hips forward to float it to chest height. The power comes from your hips, not your arms."
+        },
+        {
+          "name": "Reverse lunge",
+          "desc": "Hold the bell at your chest. Step one foot back and lower until the back knee nearly touches the floor, front shin vertical. Push through the front heel to return, then switch legs."
+        },
+        {
+          "name": "Push-up",
+          "desc": "Hands under shoulders, body in one straight line. Lower your chest toward the floor, then press back up. Drop to your knees if you need to."
+        }
+      ],
+      "lbl": "Round 2 of 4",
+      "say": "Round 2",
+      "nextText": "Next: Round 3 of 4"
+    },
+    {
+      "sec": 2,
+      "phase": "endurance",
+      "type": "emom",
+      "title": "Round 3 of 4",
+      "sub": "Tap each line when you finish it.",
+      "round": "A new round every 2 minutes",
+      "dur": 120,
+      "tasks": [
+        "20 kettlebell swings",
+        "10 reverse lunges (5 per leg)",
+        "5 push-ups"
+      ],
+      "details": [
+        {
+          "name": "Kettlebell swing",
+          "desc": "Feet wider than shoulders, bell on the floor just ahead of you. Hinge, hike the bell back between your legs, then snap your hips forward to float it to chest height. The power comes from your hips, not your arms."
+        },
+        {
+          "name": "Reverse lunge",
+          "desc": "Hold the bell at your chest. Step one foot back and lower until the back knee nearly touches the floor, front shin vertical. Push through the front heel to return, then switch legs."
+        },
+        {
+          "name": "Push-up",
+          "desc": "Hands under shoulders, body in one straight line. Lower your chest toward the floor, then press back up. Drop to your knees if you need to."
+        }
+      ],
+      "lbl": "Round 3 of 4",
+      "say": "Round 3",
+      "nextText": "Next: Round 4 of 4"
+    },
+    {
+      "sec": 2,
+      "phase": "endurance",
+      "type": "emom",
+      "title": "Round 4 of 4",
+      "sub": "Tap each line when you finish it.",
+      "round": "A new round every 2 minutes",
+      "dur": 120,
+      "tasks": [
+        "20 kettlebell swings",
+        "10 reverse lunges (5 per leg)",
+        "5 push-ups"
+      ],
+      "details": [
+        {
+          "name": "Kettlebell swing",
+          "desc": "Feet wider than shoulders, bell on the floor just ahead of you. Hinge, hike the bell back between your legs, then snap your hips forward to float it to chest height. The power comes from your hips, not your arms."
+        },
+        {
+          "name": "Reverse lunge",
+          "desc": "Hold the bell at your chest. Step one foot back and lower until the back knee nearly touches the floor, front shin vertical. Push through the front heel to return, then switch legs."
+        },
+        {
+          "name": "Push-up",
+          "desc": "Hands under shoulders, body in one straight line. Lower your chest toward the floor, then press back up. Drop to your knees if you need to."
+        }
+      ],
+      "lbl": "Round 4 of 4",
+      "say": "Round 4",
+      "nextText": "Next: Plank"
+    },
+    {
+      "sec": 3,
+      "phase": "core",
+      "type": "prep",
+      "title": "Get ready",
+      "dur": 10,
+      "hint": "Put the bell down and get onto the mat.",
+      "round": "",
+      "sub": "Next: Plank",
+      "details": [
+        {
+          "name": "Plank",
+          "desc": "Forearms on the mat, elbows under your shoulders. Make a straight line from head to heels, brace your abs and squeeze your glutes."
+        }
+      ],
+      "say": "Get ready. Next, Plank"
+    },
+    {
+      "sec": 3,
+      "phase": "core",
+      "type": "work",
+      "title": "Plank",
+      "sub": "30 seconds",
+      "dur": 30,
+      "round": "Round 1 of 2",
+      "details": [
+        {
+          "name": "Plank",
+          "desc": "Forearms on the mat, elbows under your shoulders. Make a straight line from head to heels, brace your abs and squeeze your glutes."
+        }
+      ],
+      "lbl": "Plank",
+      "say": "Plank",
+      "half": "",
+      "nextText": "Next: Russian twist"
+    },
+    {
+      "sec": 3,
+      "phase": "core",
+      "type": "work",
+      "title": "Russian twist",
+      "sub": "30 seconds",
+      "dur": 30,
+      "round": "Round 1 of 2",
+      "details": [
+        {
+          "name": "Russian twist",
+          "desc": "Sit with knees bent and lean back slightly, holding the bell at your chest. Rotate side to side, tapping the bell down beside each hip. Lift your feet to make it harder."
+        }
+      ],
+      "lbl": "Russian twist",
+      "say": "Russian twist",
+      "half": "",
+      "nextText": "Next: Dead bug"
+    },
+    {
+      "sec": 3,
+      "phase": "core",
+      "type": "work",
+      "title": "Dead bug",
+      "sub": "30 seconds",
+      "dur": 30,
+      "round": "Round 1 of 2",
+      "details": [
+        {
+          "name": "Dead bug",
+          "desc": "Lie on your back with arms pointing to the ceiling and knees bent over your hips. Lower your opposite arm and leg toward the floor, keeping your lower back pressed into the mat. Return and alternate."
+        }
+      ],
+      "lbl": "Dead bug",
+      "say": "Dead bug",
+      "half": "",
+      "nextText": "Next: Side plank, left side"
+    },
+    {
+      "sec": 3,
+      "phase": "core",
+      "type": "work",
+      "title": "Side plank",
+      "sub": "Left side, 15 seconds",
+      "dur": 15,
+      "round": "Round 1 of 2",
+      "details": [
+        {
+          "name": "Side plank",
+          "desc": "On one forearm with feet stacked, lift your hips so your body forms a straight line. Keep your hips high and hold."
+        }
+      ],
+      "lbl": "Side plank, left side",
+      "say": "Side plank, left side",
+      "half": "",
+      "nextText": "Next: Side plank, right side"
+    },
+    {
+      "sec": 3,
+      "phase": "core",
+      "type": "work",
+      "title": "Side plank",
+      "sub": "Right side, 15 seconds",
+      "dur": 15,
+      "round": "Round 1 of 2",
+      "details": [
+        {
+          "name": "Side plank",
+          "desc": "On one forearm with feet stacked, lift your hips so your body forms a straight line. Keep your hips high and hold."
+        }
+      ],
+      "lbl": "Side plank, right side",
+      "say": "Side plank, right side",
+      "half": "",
+      "nextText": "Next: Plank"
+    },
+    {
+      "sec": 3,
+      "phase": "core",
+      "type": "work",
+      "title": "Plank",
+      "sub": "30 seconds",
+      "dur": 30,
+      "round": "Round 2 of 2",
+      "details": [
+        {
+          "name": "Plank",
+          "desc": "Forearms on the mat, elbows under your shoulders. Make a straight line from head to heels, brace your abs and squeeze your glutes."
+        }
+      ],
+      "lbl": "Plank",
+      "say": "Plank",
+      "half": "",
+      "nextText": "Next: Russian twist"
+    },
+    {
+      "sec": 3,
+      "phase": "core",
+      "type": "work",
+      "title": "Russian twist",
+      "sub": "30 seconds",
+      "dur": 30,
+      "round": "Round 2 of 2",
+      "details": [
+        {
+          "name": "Russian twist",
+          "desc": "Sit with knees bent and lean back slightly, holding the bell at your chest. Rotate side to side, tapping the bell down beside each hip. Lift your feet to make it harder."
+        }
+      ],
+      "lbl": "Russian twist",
+      "say": "Russian twist",
+      "half": "",
+      "nextText": "Next: Dead bug"
+    },
+    {
+      "sec": 3,
+      "phase": "core",
+      "type": "work",
+      "title": "Dead bug",
+      "sub": "30 seconds",
+      "dur": 30,
+      "round": "Round 2 of 2",
+      "details": [
+        {
+          "name": "Dead bug",
+          "desc": "Lie on your back with arms pointing to the ceiling and knees bent over your hips. Lower your opposite arm and leg toward the floor, keeping your lower back pressed into the mat. Return and alternate."
+        }
+      ],
+      "lbl": "Dead bug",
+      "say": "Dead bug",
+      "half": "",
+      "nextText": "Next: Side plank, left side"
+    },
+    {
+      "sec": 3,
+      "phase": "core",
+      "type": "work",
+      "title": "Side plank",
+      "sub": "Left side, 15 seconds",
+      "dur": 15,
+      "round": "Round 2 of 2",
+      "details": [
+        {
+          "name": "Side plank",
+          "desc": "On one forearm with feet stacked, lift your hips so your body forms a straight line. Keep your hips high and hold."
+        }
+      ],
+      "lbl": "Side plank, left side",
+      "say": "Side plank, left side",
+      "half": "",
+      "nextText": "Next: Side plank, right side"
+    },
+    {
+      "sec": 3,
+      "phase": "core",
+      "type": "work",
+      "title": "Side plank",
+      "sub": "Right side, 15 seconds",
+      "dur": 15,
+      "round": "Round 2 of 2",
+      "details": [
+        {
+          "name": "Side plank",
+          "desc": "On one forearm with feet stacked, lift your hips so your body forms a straight line. Keep your hips high and hold."
+        }
+      ],
+      "lbl": "Side plank, right side",
+      "say": "Side plank, right side",
+      "half": "",
+      "nextText": "Next: Child's pose"
+    },
+    {
+      "sec": 4,
+      "phase": "cooldown",
+      "type": "prep",
+      "title": "Get ready",
+      "dur": 10,
+      "hint": "Slow, easy breathing.",
+      "round": "",
+      "sub": "Next: Child's pose",
+      "details": [
+        {
+          "name": "Child's pose",
+          "desc": "Kneel and sit your hips back toward your heels, arms extended in front and forehead resting down. Let your back and shoulders relax."
+        }
+      ],
+      "say": "Get ready. Next, Child's pose"
+    },
+    {
+      "sec": 4,
+      "phase": "cooldown",
+      "type": "work",
+      "title": "Child's pose",
+      "sub": "45 seconds",
+      "dur": 45,
+      "round": "Stretch 1 of 9",
+      "details": [
+        {
+          "name": "Child's pose",
+          "desc": "Kneel and sit your hips back toward your heels, arms extended in front and forehead resting down. Let your back and shoulders relax."
+        }
+      ],
+      "lbl": "Child's pose",
+      "say": "Child's pose",
+      "half": "",
+      "nextText": "Next: Hip flexor stretch, left side"
+    },
+    {
+      "sec": 4,
+      "phase": "cooldown",
+      "type": "work",
+      "title": "Hip flexor stretch",
+      "sub": "Left side, 30 seconds",
+      "dur": 30,
+      "round": "Stretch 2 of 9",
+      "details": [
+        {
+          "name": "Hip flexor stretch",
+          "desc": "Half-kneeling with your back knee on the mat. Tuck your pelvis under and shift forward until you feel a stretch across the front of your back hip."
+        }
+      ],
+      "lbl": "Hip flexor stretch, left side",
+      "say": "Hip flexor stretch, left side",
+      "half": "",
+      "nextText": "Next: Hip flexor stretch, right side"
+    },
+    {
+      "sec": 4,
+      "phase": "cooldown",
+      "type": "work",
+      "title": "Hip flexor stretch",
+      "sub": "Right side, 30 seconds",
+      "dur": 30,
+      "round": "Stretch 3 of 9",
+      "details": [
+        {
+          "name": "Hip flexor stretch",
+          "desc": "Half-kneeling with your back knee on the mat. Tuck your pelvis under and shift forward until you feel a stretch across the front of your back hip."
+        }
+      ],
+      "lbl": "Hip flexor stretch, right side",
+      "say": "Hip flexor stretch, right side",
+      "half": "",
+      "nextText": "Next: Hamstring stretch, left side"
+    },
+    {
+      "sec": 4,
+      "phase": "cooldown",
+      "type": "work",
+      "title": "Hamstring stretch",
+      "sub": "Left side, 30 seconds",
+      "dur": 30,
+      "round": "Stretch 4 of 9",
+      "details": [
+        {
+          "name": "Hamstring stretch",
+          "desc": "Sit or lie with one leg extended, then hinge forward from the hips (or raise the leg on your back), keeping the back long."
+        }
+      ],
+      "lbl": "Hamstring stretch, left side",
+      "say": "Hamstring stretch, left side",
+      "half": "",
+      "nextText": "Next: Hamstring stretch, right side"
+    },
+    {
+      "sec": 4,
+      "phase": "cooldown",
+      "type": "work",
+      "title": "Hamstring stretch",
+      "sub": "Right side, 30 seconds",
+      "dur": 30,
+      "round": "Stretch 5 of 9",
+      "details": [
+        {
+          "name": "Hamstring stretch",
+          "desc": "Sit or lie with one leg extended, then hinge forward from the hips (or raise the leg on your back), keeping the back long."
+        }
+      ],
+      "lbl": "Hamstring stretch, right side",
+      "say": "Hamstring stretch, right side",
+      "half": "",
+      "nextText": "Next: Figure-4 glute stretch, left side"
+    },
+    {
+      "sec": 4,
+      "phase": "cooldown",
+      "type": "work",
+      "title": "Figure-4 glute stretch",
+      "sub": "Left side, 30 seconds",
+      "dur": 30,
+      "round": "Stretch 6 of 9",
+      "details": [
+        {
+          "name": "Figure-4 glute stretch",
+          "desc": "Lie on your back and cross one ankle over the opposite knee. Pull the bottom thigh toward your chest until you feel a stretch in the glute."
+        }
+      ],
+      "lbl": "Figure-4 glute stretch, left side",
+      "say": "Figure-4 glute stretch, left side",
+      "half": "",
+      "nextText": "Next: Figure-4 glute stretch, right side"
+    },
+    {
+      "sec": 4,
+      "phase": "cooldown",
+      "type": "work",
+      "title": "Figure-4 glute stretch",
+      "sub": "Right side, 30 seconds",
+      "dur": 30,
+      "round": "Stretch 7 of 9",
+      "details": [
+        {
+          "name": "Figure-4 glute stretch",
+          "desc": "Lie on your back and cross one ankle over the opposite knee. Pull the bottom thigh toward your chest until you feel a stretch in the glute."
+        }
+      ],
+      "lbl": "Figure-4 glute stretch, right side",
+      "say": "Figure-4 glute stretch, right side",
+      "half": "",
+      "nextText": "Next: Cross-body shoulder stretch, left side"
+    },
+    {
+      "sec": 4,
+      "phase": "cooldown",
+      "type": "work",
+      "title": "Cross-body shoulder stretch",
+      "sub": "Left side, 30 seconds",
+      "dur": 30,
+      "round": "Stretch 8 of 9",
+      "details": [
+        {
+          "name": "Cross-body shoulder stretch",
+          "desc": "Draw one arm across your chest and hold it with the other. Keep your shoulders relaxed and away from your ears."
+        }
+      ],
+      "lbl": "Cross-body shoulder stretch, left side",
+      "say": "Cross-body shoulder stretch, left side",
+      "half": "",
+      "nextText": "Next: Cross-body shoulder stretch, right side"
+    },
+    {
+      "sec": 4,
+      "phase": "cooldown",
+      "type": "work",
+      "title": "Cross-body shoulder stretch",
+      "sub": "Right side, 30 seconds",
+      "dur": 30,
+      "round": "Stretch 9 of 9",
+      "details": [
+        {
+          "name": "Cross-body shoulder stretch",
+          "desc": "Draw one arm across your chest and hold it with the other. Keep your shoulders relaxed and away from your ears."
+        }
+      ],
+      "lbl": "Cross-body shoulder stretch, right side",
+      "say": "Cross-body shoulder stretch, right side",
+      "half": "",
+      "nextText": "Last one"
+    }
+  ],
+  "cum": [
+    0,
+    5,
+    80,
+    155,
+    230,
+    305,
+    315,
+    360,
+    375,
+    420,
+    435,
+    480,
+    495,
+    540,
+    555,
+    600,
+    615,
+    660,
+    675,
+    720,
+    735,
+    780,
+    795,
+    915,
+    1035,
+    1155,
+    1275,
+    1285,
+    1315,
+    1345,
+    1375,
+    1390,
+    1405,
+    1435,
+    1465,
+    1495,
+    1510,
+    1525,
+    1535,
+    1580,
+    1610,
+    1640,
+    1670,
+    1700,
+    1730,
+    1760,
+    1790
+  ],
+  "total": 1820,
+  "segs": [
+    {
+      "phase": "warmup",
+      "start": 0,
+      "total": 305
+    },
+    {
+      "phase": "strength",
+      "start": 305,
+      "total": 475
+    },
+    {
+      "phase": "endurance",
+      "start": 780,
+      "total": 495
+    },
+    {
+      "phase": "core",
+      "start": 1275,
+      "total": 250
+    },
+    {
+      "phase": "cooldown",
+      "start": 1525,
+      "total": 295
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main, full-version]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Formatting
+        run: pnpm format:check
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Unit tests
+        run: pnpm test
+
+      # The golden fixture must stay a faithful recording of the original app
+      # rather than something edited to make a failing test pass.
+      - name: Golden fixture is unmodified
+        run: |
+          node packages/core/scripts/extract-legacy-steps.mjs
+          git diff --exit-code packages/core/test/fixtures/legacy-steps.json
