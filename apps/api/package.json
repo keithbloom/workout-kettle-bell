@@ -20,7 +20,7 @@
     "better-auth": "^1.7.5",
     "drizzle-orm": "^0.45.2",
     "hono": "^4.13.8",
-    "zod": "^4.6.5"
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.22.0",

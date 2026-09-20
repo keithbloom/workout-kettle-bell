@@ -9,7 +9,12 @@ export default tseslint.config(
   {
     rules: {
       '@typescript-eslint/consistent-type-imports': 'error',
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      // `const { id: _id, ...rest } = x` is how we drop a field; the discarded
+      // binding is the point, not an oversight.
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', ignoreRestSiblings: true },
+      ],
     },
   },
   {

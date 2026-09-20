@@ -1,6 +1,14 @@
 import { asc, eq, isNull, or } from 'drizzle-orm';
 import type { drizzle } from 'drizzle-orm/d1';
-import type { Block, BlockItem, Exercise, Prep, Section, WorkoutDefinition } from '@kb/core';
+import type {
+  Block,
+  BlockItem,
+  Exercise,
+  Prep,
+  Section,
+  WorkoutDefinition,
+  WorkoutDraft,
+} from '@kb/core';
 import * as schema from '../db/schema.js';
 
 export type Db = ReturnType<typeof drizzle<typeof schema>>;
@@ -178,4 +186,147 @@ export async function listExercises(db: Db): Promise<Exercise[]> {
     .orderBy(asc(schema.exercises.name));
 
   return rows;
+}
+
+/* ------------------------------ writing ------------------------------ */
+
+/** Whether `userId` may change this workout: only their own, never a built-in. */
+export async function canWrite(db: Db, workoutId: string, userId: string): Promise<boolean> {
+  const row = await db.query.workouts.findFirst({
+    columns: { ownerUserId: true },
+    where: eq(schema.workouts.id, workoutId),
+  });
+
+  return row?.ownerUserId === userId;
+}
+
+/**
+ * D1 allows at most 100 bound parameters per statement, so a multi-row insert
+ * has to be split by how many columns each row occupies. A twenty-item workout
+ * is 160 parameters in one statement, which fails.
+ */
+const D1_MAX_BOUND_PARAMS = 100;
+
+function chunkByParams<T>(rows: T[], columnsPerRow: number): T[][] {
+  const perChunk = Math.max(1, Math.floor(D1_MAX_BOUND_PARAMS / columnsPerRow));
+  const chunks: T[][] = [];
+  for (let i = 0; i < rows.length; i += perChunk) chunks.push(rows.slice(i, i + perChunk));
+  return chunks;
+}
+
+/**
+ * Write a workout's contents, replacing whatever was there.
+ *
+ * Sections are deleted and reinserted rather than diffed. A workout is small
+ * and always saved whole by the builder, so a diff would buy nothing and add a
+ * class of bug where a half-applied reorder leaves two blocks claiming the same
+ * position. The delete cascades to blocks and items.
+ *
+ * The whole replacement goes through one `batch`, which D1 runs as a single
+ * transaction — otherwise a failure partway through would leave a workout with
+ * its sections deleted and nothing put back.
+ *
+ * Row ids are derived from the workout and the position, so they stay readable
+ * and a save is deterministic.
+ */
+export async function saveWorkoutContents(
+  db: Db,
+  workoutId: string,
+  draft: WorkoutDraft,
+): Promise<void> {
+  const sectionRows: (typeof schema.sections.$inferInsert)[] = [];
+  const blockRows: (typeof schema.blocks.$inferInsert)[] = [];
+  const itemRows: (typeof schema.blockItems.$inferInsert)[] = [];
+
+  draft.sections.forEach((section, s) => {
+    const sectionId = `${workoutId}:s${s}`;
+    sectionRows.push({
+      id: sectionId,
+      workoutId,
+      position: s,
+      title: section.title,
+      phase: section.phase,
+      intro: section.intro,
+    });
+
+    section.blocks.forEach((block, b) => {
+      const blockId = `${sectionId}:b${b}`;
+      blockRows.push({
+        id: blockId,
+        sectionId,
+        position: b,
+        kind: block.kind,
+        rounds: block.rounds ?? null,
+        workSec: block.workSec ?? null,
+        restSec: block.restSec ?? null,
+        intervalSec: block.intervalSec ?? null,
+        estimatedSecPerItem: block.estimatedSecPerItem ?? null,
+        prepSec: block.prep?.durationSec ?? null,
+        prepHint: block.prep?.hint ?? null,
+        tasks: block.tasks ?? null,
+      });
+
+      block.items.forEach((item, i) => {
+        itemRows.push({
+          id: `${blockId}:i${i}`,
+          blockId,
+          position: i,
+          exerciseSlug: item.exerciseSlug,
+          durationSec: item.durationSec ?? null,
+          reps: item.reps ?? null,
+          side: item.side ?? null,
+          switchNoun: item.switchNoun ?? null,
+        });
+      });
+    });
+  });
+
+  // Parents before children, so the foreign keys hold at every step.
+  const statements = [
+    db.delete(schema.sections).where(eq(schema.sections.workoutId, workoutId)),
+    ...chunkByParams(sectionRows, 6).map((rows) => db.insert(schema.sections).values(rows)),
+    ...chunkByParams(blockRows, 12).map((rows) => db.insert(schema.blocks).values(rows)),
+    ...chunkByParams(itemRows, 8).map((rows) => db.insert(schema.blockItems).values(rows)),
+  ];
+
+  await db.batch(statements as [(typeof statements)[number], ...typeof statements]);
+}
+
+export async function createWorkout(
+  db: Db,
+  ownerUserId: string,
+  draft: WorkoutDraft,
+): Promise<string> {
+  const id = crypto.randomUUID();
+  const now = new Date();
+
+  await db.insert(schema.workouts).values({
+    id,
+    ownerUserId,
+    name: draft.name,
+    description: draft.description,
+    isTemplate: false,
+    createdAt: now,
+    updatedAt: now,
+  });
+
+  await saveWorkoutContents(db, id, draft);
+  return id;
+}
+
+export async function replaceWorkout(
+  db: Db,
+  workoutId: string,
+  draft: WorkoutDraft,
+): Promise<void> {
+  await db
+    .update(schema.workouts)
+    .set({ name: draft.name, description: draft.description, updatedAt: new Date() })
+    .where(eq(schema.workouts.id, workoutId));
+
+  await saveWorkoutContents(db, workoutId, draft);
+}
+
+export async function deleteWorkout(db: Db, workoutId: string): Promise<void> {
+  await db.delete(schema.workouts).where(eq(schema.workouts.id, workoutId));
 }

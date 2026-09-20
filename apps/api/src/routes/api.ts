@@ -1,14 +1,19 @@
 import { Hono } from 'hono';
 import { drizzle } from 'drizzle-orm/d1';
 import { z } from 'zod';
+import { workoutDraftSchema } from '@kb/core';
 import * as schema from '../db/schema.js';
 import type { Env } from '../env.js';
 import { requireUser, type AuthedVars } from '../middleware/require-user.js';
 import {
   canRead,
+  canWrite,
+  createWorkout,
+  deleteWorkout,
   findWorkoutDefinition,
   listExercises,
   listWorkoutsFor,
+  replaceWorkout,
 } from '../repo/workouts.js';
 import { countSessionsThisWeek, listSessions, recordSession } from '../repo/sessions.js';
 
@@ -45,6 +50,69 @@ api.get('/workouts/:id', async (c) => {
   if (!definition) return c.json({ error: 'not found' }, 404);
 
   return c.json({ workout: definition });
+});
+
+/**
+ * Creating and replacing share a body and a failure mode, so they share a
+ * reader: parse first, and only then decide whether this user may write.
+ */
+async function readDraft(c: { req: { json: () => Promise<unknown> } }) {
+  const body = await c.req.json().catch(() => null);
+  return workoutDraftSchema.safeParse(body);
+}
+
+api.post('/workouts', async (c) => {
+  const parsed = await readDraft(c);
+  if (!parsed.success) {
+    return c.json({ error: 'invalid workout', issues: parsed.error.issues }, 400);
+  }
+
+  const id = await createWorkout(db(c), c.get('user').id, parsed.data);
+  return c.json({ id }, 201);
+});
+
+api.put('/workouts/:id', async (c) => {
+  const id = c.req.param('id');
+
+  // Ownership first: a stranger learns nothing about whether the workout
+  // exists, and never gets a validation error to probe with.
+  if (!(await canWrite(db(c), id, c.get('user').id))) return c.json({ error: 'not found' }, 404);
+
+  const parsed = await readDraft(c);
+  if (!parsed.success) {
+    return c.json({ error: 'invalid workout', issues: parsed.error.issues }, 400);
+  }
+
+  await replaceWorkout(db(c), id, parsed.data);
+  return c.json({ id });
+});
+
+api.delete('/workouts/:id', async (c) => {
+  const id = c.req.param('id');
+
+  if (!(await canWrite(db(c), id, c.get('user').id))) return c.json({ error: 'not found' }, 404);
+
+  await deleteWorkout(db(c), id);
+  return c.body(null, 204);
+});
+
+/**
+ * Take your own copy of a workout you can read — the way a user starts from
+ * the built-in template rather than a blank page.
+ */
+api.post('/workouts/:id/copy', async (c) => {
+  const source = c.req.param('id');
+  const userId = c.get('user').id;
+
+  if (!(await canRead(db(c), source, userId))) return c.json({ error: 'not found' }, 404);
+
+  const definition = await findWorkoutDefinition(db(c), source);
+  if (!definition) return c.json({ error: 'not found' }, 404);
+
+  const { id: _id, name, ...rest } = definition;
+  const copyId = await createWorkout(db(c), userId, { ...rest, name: `${name} (copy)` });
+
+  return c.json({ id: copyId }, 201);
 });
 
 const sessionInput = z.object({

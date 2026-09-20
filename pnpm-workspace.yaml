@@ -9,6 +9,7 @@ packages:
 catalog:
   typescript: ^5.9.3
   vitest: ^4.1.11
+  zod: ^4.6.5
 
 allowBuilds:
   esbuild: true

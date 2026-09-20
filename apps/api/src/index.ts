@@ -22,4 +22,9 @@ app.on(['GET', 'POST'], '/api/auth/*', (c) => createAuth(c.env, c.req.url).handl
 // Everything else under /api needs a session; see routes/api.ts.
 app.route('/api', api);
 
+app.onError((err, c) => {
+  console.error('unhandled', err instanceof Error ? err.stack : err);
+  return c.json({ error: 'internal error' }, 500);
+});
+
 export default app;
