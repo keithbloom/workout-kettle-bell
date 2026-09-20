@@ -33,7 +33,8 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
-      - name: Unit tests
+      # Core's unit tests, plus the API's against workerd and a local D1.
+      - name: Tests
         run: pnpm test
 
       # The golden fixture must stay a faithful recording of the original app
@@ -42,3 +43,10 @@ jobs:
         run: |
           node packages/core/scripts/extract-legacy-steps.mjs
           git diff --exit-code packages/core/test/fixtures/legacy-steps.json
+
+      # The seed migration is generated from @kb/core, so it must not be
+      # hand-edited either: regenerate it and expect no change.
+      - name: Seed migration matches the catalogue
+        run: |
+          pnpm --filter @kb/api db:seed:write
+          git diff --exit-code apps/api/migrations/0001_seed_catalogue.sql

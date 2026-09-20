@@ -11,18 +11,22 @@
     "test:watch": "vitest",
     "db:generate": "drizzle-kit generate",
     "db:migrate:local": "wrangler d1 migrations apply kb-db --local",
-    "db:migrate:remote": "wrangler d1 migrations apply kb-db --remote"
+    "db:migrate:remote": "wrangler d1 migrations apply kb-db --remote",
+    "db:generate:custom": "drizzle-kit generate --custom",
+    "db:seed:write": "tsx scripts/write-seed-sql.ts"
   },
   "dependencies": {
     "@kb/core": "workspace:*",
     "better-auth": "^1.7.5",
     "drizzle-orm": "^0.45.2",
-    "hono": "^4.13.8"
+    "hono": "^4.13.8",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.22.0",
     "@cloudflare/workers-types": "^5.20260919.1",
     "drizzle-kit": "^0.31.10",
+    "tsx": "^4.23.13",
     "typescript": "catalog:",
     "vitest": "catalog:",
     "wrangler": "^4.135.0"
