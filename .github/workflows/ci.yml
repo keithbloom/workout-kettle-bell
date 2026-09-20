@@ -33,9 +33,13 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
-      # Core's unit tests, plus the API's against workerd and a local D1.
+      # Core's unit tests, the web app's component tests, and the API's
+      # against workerd and a local D1.
       - name: Tests
         run: pnpm test
+
+      - name: Build
+        run: pnpm build
 
       # The golden fixture must stay a faithful recording of the original app
       # rather than something edited to make a failing test pass.
@@ -50,3 +54,35 @@ jobs:
         run: |
           pnpm --filter @kb/api db:seed:write
           git diff --exit-code apps/api/migrations/0001_seed_catalogue.sql
+
+      # The Worker needs its secrets to boot. These are throwaway values for
+      # the test run — the real Google credentials never enter CI, and
+      # TEST_AUTH_ENABLED is what lets the tests sign in without Google.
+      - name: Write test dev vars
+        run: |
+          cat > apps/api/.dev.vars <<'VARS'
+          BETTER_AUTH_SECRET="ci-only-secret-not-used-anywhere-real"
+          GOOGLE_CLIENT_ID="ci-placeholder"
+          GOOGLE_CLIENT_SECRET="ci-placeholder"
+          TEST_AUTH_ENABLED="true"
+          VARS
+
+      - name: Install Playwright browser
+        run: pnpm --filter @kb/e2e exec playwright install --with-deps chromium
+
+      # Drives the real app against the real Worker and a local D1. Playwright
+      # starts both servers itself; the database needs its migrations first.
+      - name: Prepare the database
+        run: pnpm --filter @kb/api db:migrate:local
+
+      - name: End-to-end tests
+        run: pnpm --filter @kb/e2e test
+        env:
+          CI: 'true'
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: e2e/playwright-report/
+          retention-days: 7

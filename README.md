@@ -15,9 +15,9 @@ what was decided, and what comes next. The approved plan is
 | Path            | What it is                                                                                       |
 | --------------- | ------------------------------------------------------------------------------------------------ |
 | `packages/core` | The domain: workout definitions, the step compiler, the seed catalogue. Pure TypeScript, no I/O. |
-| `apps/api`      | Hono API on Cloudflare Workers, backed by D1. _(not yet built)_                                  |
-| `apps/web`      | React + Tailwind front end. _(not yet built)_                                                    |
-| `e2e`           | Playwright specs. _(not yet built)_                                                              |
+| `apps/api`      | Hono API on Cloudflare Workers, backed by D1, with Better Auth for sign-in.                      |
+| `apps/web`      | React + Tailwind front end, with the session player.                                             |
+| `e2e`           | Playwright specs, driving the real app against the real API.                                     |
 | `legacy/`       | The original single-file app, still live.                                                        |
 
 `packages/core` is the heart of it. `compileWorkout` turns an authored workout

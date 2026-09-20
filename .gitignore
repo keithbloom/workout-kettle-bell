@@ -9,3 +9,5 @@ playwright-report/
 test-results/
 .DS_Store
 *.tsbuildinfo
+e2e/test-results/
+e2e/playwright-report/

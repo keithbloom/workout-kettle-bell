@@ -3,3 +3,8 @@
 BETTER_AUTH_SECRET="replace-me"
 GOOGLE_CLIENT_ID="replace-me.apps.googleusercontent.com"
 GOOGLE_CLIENT_SECRET="replace-me"
+
+# Lets you sign in locally with an email and password instead of bouncing
+# through Google on every reload. The web app only offers that form in a dev
+# build, and production never sets this, so there is one way in for real users.
+TEST_AUTH_ENABLED="true"

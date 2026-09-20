@@ -1,0 +1,15 @@
+{
+  // exactOptionalPropertyTypes is on for the domain and the API, where the
+  // difference between "absent" and "explicitly undefined" matters. In React
+  // it only fights the idiom of passing an optional prop through as undefined,
+  // so it is off here.
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "noEmit": true,
+    "types": ["vite/client", "vitest/globals", "@testing-library/jest-dom"],
+    "exactOptionalPropertyTypes": false
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "test/**/*.ts", "test/**/*.tsx", "*.ts"]
+}

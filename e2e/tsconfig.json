@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM"],
+    "noEmit": true,
+    "exactOptionalPropertyTypes": false,
+    "types": ["node"]
+  },
+  "include": ["tests/**/*.ts", "*.ts"]
+}

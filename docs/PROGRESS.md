@@ -1,6 +1,6 @@
 # Where the rewrite has got to
 
-Last updated 2026-09-20, end of phase 2.
+Last updated 2026-09-20, end of phase 3.
 
 The approved plan is [`plan.md`](plan.md). This file records what is actually
 built, what was decided along the way, and what to do next — so a session
@@ -14,9 +14,11 @@ app keeps working. Nothing merged to `main` yet.
 
 - **Phase 1 — core domain: done.** `packages/core`, 57 tests.
 - **Phase 2 — backend and auth: done.** `apps/api`, 51 tests.
-- **Phase 3 — front end: not started.** This is the next piece of work.
+- **Phase 3 — front end: done.** `apps/web`, 50 tests, plus 8 end-to-end.
+- **Phase 4 — the workout builder: not started.** This is the next piece of work.
 
-108 tests pass. `pnpm lint`, `pnpm format:check` and `pnpm typecheck` are clean.
+158 unit and integration tests, and 8 end-to-end tests against the real stack.
+`pnpm lint`, `pnpm format:check` and `pnpm typecheck` are clean.
 
 ## Decisions taken when the plan was approved
 
@@ -77,6 +79,34 @@ default and has to be moved out to become public.
 Tests run inside workerd against a local D1 with the real migrations applied —
 no Cloudflare account, no network.
 
+### `apps/web` — React, Tailwind, and the player
+
+The original app's three screens, ported: a workout list, a workout laid out as
+coloured section bands that open to reveal the moves, the interval timer, and
+settings. Plus a sign-in screen, since an account is now required.
+
+**`src/player/session.ts` is the piece to understand.** The session engine is
+pure functions over a state value that take `now` as an argument rather than
+reading the clock. That is what makes the awkward parts testable without fake
+timers: overshoot when a tick arrives late, time given back after a pause, the
+beeps in the last three seconds. It performs no effects — it returns them as
+events, and `usePlayer.ts` decides what to do with them.
+
+The styling is mostly plain CSS rather than Tailwind utilities, deliberately.
+The visual language is a custom-property cascade: a section sets
+`data-phase="strength"` and everything inside follows from `--pbg`, `--pfg` and
+`--pacc`; the player re-points the same three variables to switch between work
+and rest. Utilities would mean naming every combination at every call site.
+
+### `e2e` — Playwright
+
+Drives the real app against the real Worker and a local D1. Playwright starts
+both servers itself, so `pnpm e2e` is the whole command. Tests sign in with an
+email and password, which keeps Google and its consent screen out of the test
+path while still exercising the real session cookie.
+
+`pnpm test` deliberately excludes these, since they need live servers.
+
 ## Things that will bite you if you forget them
 
 - **D1 allows 100 bound parameters per statement.** A twenty-item workout needs 160. Inserts are chunked by column count in `saveWorkoutContents` and the
@@ -100,29 +130,39 @@ no Cloudflare account, no network.
 - **A `.d.ts` must not share a basename with a `.ts`** in the same folder —
   `src/env.d.ts` beside `src/env.ts` silently shadowed it. The ambient
   declarations live in `src/bindings.d.ts`.
+- **`exactOptionalPropertyTypes` is off in `apps/web` and `e2e`**, on
+  everywhere else. In domain code the difference between "absent" and
+  "explicitly undefined" is worth catching; in React it only fights the idiom
+  of passing an optional prop straight through.
+- **An exercise name appears twice on a player step** — once as the title and
+  once as the heading of the instructions panel. A plain text query matches
+  both, in Testing Library and in Playwright's strict mode. Query `.p-title`
+  for the heading.
+- **The countdown only beeps on steps longer than three seconds**, or a
+  three-second prep would beep from the moment it began. Ported from the
+  original, and easy to lose.
 
-## Next: phase 3, the front end
+## Next: phase 4, the workout builder
 
-Nothing in phase 3 is blocked on Google credentials — use the email/password
-path, which is compiled in only when `TEST_AUTH_ENABLED` is set.
+The API side is already built and tested (`POST`/`PUT`/`DELETE /api/workouts`
+and the copy endpoint), so this phase is pure UI.
 
-1. Scaffold `apps/web`: Vite + React + TypeScript + Tailwind, React Router,
-   TanStack Query.
-2. Port the three views and the player from `legacy/index.html` — same layout,
-   same dark player, same phase colours, and keep the accessibility attributes
-   (`role="timer"`, the `aria-live` regions, the reduced-motion block).
-3. The player becomes a `useSession` hook over the step list from `@kb/core`;
-   the audio, haptics, voice and wake-lock helpers (`legacy/index.html` around
-   lines 301–332) become small typed modules.
-4. Sign-in screen, workout list, session history.
+1. Start from a copy of a workout, or from empty.
+2. Add and reorder sections; add blocks of the four kinds; pick exercises from
+   the catalogue with search and filtering; set per-item doses and sides.
+3. A live "this is N minutes" total by calling `compileWorkout` in the browser —
+   the same function the player uses, so the preview cannot drift.
+4. Validate with `workoutDraftSchema` from `@kb/core` before sending, so the
+   builder and the API agree on what is legal.
 
-Then phase 4 (builder), 5 (offline and sync), 6 (deploy), 7 (retire `legacy/`).
+Then phase 5 (offline and sync), 6 (deploy), 7 (retire `legacy/`).
 
 ## Still outstanding
 
-- **CI has never run.** It fires on a push to `full-version` or `main`. Check
-  it, since workerd in Actions is the one thing not yet exercised.
-- **Google OAuth client** — needed before real sign-in works. Redirect URIs are
+- **Google sign-in has never been exercised end to end.** The credentials are
+  in `apps/api/.dev.vars`, but every test signs in with a password instead. Try
+  the "Continue with Google" button by hand before relying on it.
+- **Google OAuth client** — configured locally. Redirect URIs are
   `<API origin>/api/auth/callback/google`, i.e.
   `http://localhost:8787/api/auth/callback/google` locally. Keep the consent
   screen in Testing mode and add yourself as a test user; that avoids
@@ -139,11 +179,18 @@ Then phase 4 (builder), 5 (offline and sync), 6 (deploy), 7 (retire `legacy/`).
 
 ```sh
 pnpm install
-pnpm test          # core, plus the API on the real Workers runtime
+pnpm test          # core, web and the API; not the end-to-end tests
 pnpm typecheck
 pnpm lint
 
 cp apps/api/.dev.vars.example apps/api/.dev.vars   # then fill it in
 pnpm --filter @kb/api db:migrate:local
-pnpm --filter @kb/api dev
+
+pnpm --filter @kb/api dev     # the Worker, on :8787
+pnpm --filter @kb/web dev     # the app, on :5173, proxying /api to the Worker
+
+pnpm e2e           # starts both servers itself
 ```
+
+`.dev.vars` sets `TEST_AUTH_ENABLED`, so a dev build offers email-and-password
+sign-in as well as Google. Production never sets it.
