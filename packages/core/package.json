@@ -16,8 +16,8 @@
     "test:watch": "vitest"
   },
   "devDependencies": {
-    "typescript": "^5.7.3",
-    "vitest": "^3.0.5"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "dependencies": {
     "zod": "^3.24.1"

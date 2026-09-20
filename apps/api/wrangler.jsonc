@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kb-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-22",
+  // better-auth needs node built-ins (crypto, buffer) on the Workers runtime.
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "kb-db",
+      // Replaced by the id from `wrangler d1 create kb-db`. Local dev ignores
+      // it and uses a sqlite file under .wrangler/.
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations",
+    },
+  ],
+  "vars": {
+    "APP_URL": "http://localhost:5173",
+  },
+}

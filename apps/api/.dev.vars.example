@@ -1,0 +1,5 @@
+# Copy to .dev.vars for local development. .dev.vars is gitignored.
+# Generate a secret with: openssl rand -base64 32
+BETTER_AUTH_SECRET="replace-me"
+GOOGLE_CLIENT_ID="replace-me.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET="replace-me"

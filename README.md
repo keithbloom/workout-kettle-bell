@@ -25,9 +25,21 @@ the session you get.
 
 ```sh
 pnpm install
-pnpm test        # unit tests
+pnpm test        # core unit tests, plus API tests on the real Workers runtime
 pnpm typecheck
 pnpm lint
+```
+
+The API's tests run inside workerd against a local D1 with the real migrations
+applied, so they exercise the same runtime and SQL as production. They need no
+Cloudflare account and no network.
+
+To run the API locally you'll need secrets:
+
+```sh
+cp apps/api/.dev.vars.example apps/api/.dev.vars   # then fill it in
+pnpm --filter @kb/api db:migrate:local
+pnpm --filter @kb/api dev
 ```
 
 ### The golden fixture

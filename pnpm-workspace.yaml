@@ -3,5 +3,13 @@ packages:
   - 'packages/*'
   - 'e2e'
 
+# One version of each shared tool across the workspace. `catalog:` in a
+# package.json resolves to the entry here, so the API and the core package
+# cannot drift onto different compilers or test runners.
+catalog:
+  typescript: ^5.9.3
+  vitest: ^4.1.11
+
 allowBuilds:
   esbuild: true
+  workerd: true
