@@ -6,6 +6,10 @@ with a guided timer, or use the standalone interval timer.
 This is v2, a multi-user rewrite in progress. The original single-file app still
 lives in [`legacy/`](legacy/) and is what's deployed today.
 
+**Picking this up?** [`docs/PROGRESS.md`](docs/PROGRESS.md) says what is built,
+what was decided, and what comes next. The approved plan is
+[`docs/plan.md`](docs/plan.md).
+
 ## Layout
 
 | Path            | What it is                                                                                       |
