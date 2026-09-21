@@ -49,7 +49,9 @@ api.get('/workouts/:id', async (c) => {
   const definition = await findWorkoutDefinition(db(c), id);
   if (!definition) return c.json({ error: 'not found' }, 404);
 
-  return c.json({ workout: definition });
+  // Told rather than inferred: the client should not have to work out whether
+  // the Edit button belongs on screen from the shape of the data.
+  return c.json({ workout: definition, canEdit: await canWrite(db(c), id, userId) });
 });
 
 /**

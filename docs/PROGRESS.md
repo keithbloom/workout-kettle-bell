@@ -1,6 +1,6 @@
 # Where the rewrite has got to
 
-Last updated 2026-09-20, end of phase 3.
+Last updated 2026-09-21, end of phase 4.
 
 The approved plan is [`plan.md`](plan.md). This file records what is actually
 built, what was decided along the way, and what to do next — so a session
@@ -14,10 +14,11 @@ app keeps working. Nothing merged to `main` yet.
 
 - **Phase 1 — core domain: done.** `packages/core`, 57 tests.
 - **Phase 2 — backend and auth: done.** `apps/api`, 51 tests.
-- **Phase 3 — front end: done.** `apps/web`, 50 tests, plus 8 end-to-end.
-- **Phase 4 — the workout builder: not started.** This is the next piece of work.
+- **Phase 3 — front end: done.** `apps/web`, plus the Playwright suite.
+- **Phase 4 — the workout builder: done.** Build, edit, copy and delete.
+- **Phase 5 — offline and sync: not started.** This is the next piece of work.
 
-158 unit and integration tests, and 8 end-to-end tests against the real stack.
+184 unit and integration tests, and 16 end-to-end tests against the real stack.
 `pnpm lint`, `pnpm format:check` and `pnpm typecheck` are clean.
 
 ## Decisions taken when the plan was approved
@@ -98,6 +99,25 @@ The visual language is a custom-property cascade: a section sets
 `--pacc`; the player re-points the same three variables to switch between work
 and rest. Utilities would mean naming every combination at every call site.
 
+### The builder
+
+`src/builder/draft.ts` holds the editing rules as pure functions over a draft,
+so they are tested on their own and the screen only renders and dispatches. The
+draft is a `WorkoutDraft` plus a `key` on every block and item: React needs a
+stable identity per row to reorder a list without muddling the inputs inside
+it, and position is not that identity. `toWorkoutDraft` strips the keys.
+
+The running total comes from `compileWorkout` — the same function the player
+runs — so what the builder promises and what the session delivers cannot drift.
+
+Reordering uses up and down buttons rather than drag-and-drop, a deliberate
+departure from the plan: this is a phone-first app used with sweaty hands, and
+a drag target is harder to hit and much harder to operate with a screen reader
+or a keyboard.
+
+`GET /api/workouts/:id` returns `canEdit` alongside the workout, so the client
+is told whether the Edit button belongs on screen rather than inferring it.
+
 ### `e2e` — Playwright
 
 Drives the real app against the real Worker and a local D1. Playwright starts
@@ -141,26 +161,55 @@ path while still exercising the real session cookie.
 - **The countdown only beeps on steps longer than three seconds**, or a
   three-second prep would beep from the moment it began. Ported from the
   original, and easy to lose.
+- **Mutations must invalidate the individual workout, not just the list.**
+  Workouts are cached for half an hour, so an edit that only invalidates
+  `['workouts']` saves correctly and then shows the previous version on the
+  detail screen. This shipped once and is covered by an end-to-end test now.
+- **`.btn2` sets its colour explicitly.** Inside a coloured section band the
+  inherited colour is the band's foreground, which on the button's white
+  background is invisible.
 - **Better Auth's social sign-in is a POST, not a link.** You POST
   `/api/auth/sign-in/social` with `{provider, callbackURL}`, it mints the state
   and PKCE challenge, and hands back a URL to send the browser to. An `<a href>`
   to the same path is a GET, which has no route and 404s — which is exactly
   what shipped once.
 
-## Next: phase 4, the workout builder
+## Next: phase 5, offline and sync
 
-The API side is already built and tested (`POST`/`PUT`/`DELETE /api/workouts`
-and the copy endpoint), so this phase is pure UI.
+1. `vite-plugin-pwa` for the shell, and a manifest and icons (the originals are
+   in `legacy/`).
+2. Persist the TanStack Query cache for workouts and the catalogue into
+   IndexedDB, so a signed-in user can open the app and start with no signal.
+   `LONG_LIVED` in `src/api/queries.ts` already holds them long enough.
+3. Completed sessions into an IndexedDB outbox keyed by `clientId`, flushed on
+   reconnect. The API already upserts on `(user_id, client_id)`, so a replayed
+   flush is a no-op — that is tested.
+4. An end-to-end test using `context.setOffline(true)`: run a session offline,
+   reconnect, and check it appears in history.
 
-1. Start from a copy of a workout, or from empty.
-2. Add and reorder sections; add blocks of the four kinds; pick exercises from
-   the catalogue with search and filtering; set per-item doses and sides.
-3. A live "this is N minutes" total by calling `compileWorkout` in the browser —
-   the same function the player uses, so the preview cannot drift.
-4. Validate with `workoutDraftSchema` from `@kb/core` before sending, so the
-   builder and the API agree on what is legal.
+Then phase 6 (deploy) and 7 (retire `legacy/`). The account UI noted above
+wants doing around here too.
 
-Then phase 5 (offline and sync), 6 (deploy), 7 (retire `legacy/`).
+## Wanted: an account presence in the UI
+
+Asked for on 2026-09-21. Not built yet.
+
+Signing in currently leaves no trace on screen — the only sign of who you are
+is a line buried in Settings. There should be:
+
+- **A user element in the chrome**, visible on every screen once signed in:
+  avatar plus name, tapping through to the account page.
+- **An account page** of its own, rather than a paragraph inside Settings.
+- **The avatar from Google**, falling back to Gravatar (an MD5 of the
+  lower-cased, trimmed email against `gravatar.com/avatar/<hash>?d=…`), and
+  falling back again to initials when neither has a picture. Better Auth already
+  stores Google's picture in `user.image`, but `GET /api/me` does not return it
+  — that field needs adding to the endpoint and to `CurrentUser`.
+- **Sign out** from the account page. This already exists in Settings
+  (`useSignOut`) and would move rather than be written fresh.
+
+Worth doing alongside or just after the builder, since the builder adds the
+first screens where "whose workout is this?" actually matters.
 
 ## Still outstanding
 

@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router';
 import { useCurrentUser } from './auth/useAuth.js';
+import { BuilderView } from './builder/BuilderView.js';
 import { Nav } from './components/Nav.js';
 import { SignInView } from './views/SignInView.js';
 import { SettingsView } from './views/SettingsView.js';
@@ -38,7 +39,10 @@ export function App() {
       <main>
         <Routes>
           <Route path="/" element={<WorkoutsView />} />
+          <Route path="/workouts/new" element={<BuilderView mode="new" />} />
           <Route path="/workouts/:id" element={<WorkoutDetailView />} />
+          <Route path="/workouts/:id/edit" element={<BuilderView mode="edit" />} />
+          <Route path="/workouts/:id/copy" element={<BuilderView mode="copy" />} />
           <Route path="/timer" element={<TimerView />} />
           <Route path="/settings" element={<SettingsView />} />
           <Route

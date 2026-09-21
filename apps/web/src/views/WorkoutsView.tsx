@@ -20,6 +20,12 @@ export function WorkoutsView() {
           : ''}
       </p>
 
+      <div className="row-actions">
+        <Link to="/workouts/new" className="btn2">
+          Build a workout
+        </Link>
+      </div>
+
       {workouts.isPending && <p className="status">Loading…</p>}
 
       {workouts.error && (

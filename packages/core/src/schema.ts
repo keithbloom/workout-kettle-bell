@@ -53,7 +53,7 @@ const blockSchema = z.object({
 const sectionSchema = z.object({
   id: z.string().min(1).max(200),
   title: z.string().min(1).max(100),
-  phase: z.enum(PHASES as unknown as [string, ...string[]]),
+  phase: z.enum(PHASES),
   intro: z.string().max(1000),
   blocks: z.array(blockSchema).min(1).max(LIMITS.blocksPerSection),
 });

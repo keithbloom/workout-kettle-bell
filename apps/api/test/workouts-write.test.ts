@@ -266,6 +266,25 @@ describe('other people’s workouts', () => {
   });
 });
 
+describe('who may edit what', () => {
+  it('tells you a workout of your own is editable', async () => {
+    const session = await signIn();
+    const id = await createWorkout(session);
+
+    const res = await send('GET', `/api/workouts/${id}`, session);
+
+    expect(await res.json()).toMatchObject({ canEdit: true });
+  });
+
+  it('tells you a built-in template is not', async () => {
+    const session = await signIn();
+
+    const res = await send('GET', `/api/workouts/${KETTLEBELL_AND_MAT.id}`, session);
+
+    expect(await res.json()).toMatchObject({ canEdit: false });
+  });
+});
+
 describe('the built-in template', () => {
   it('cannot be edited', async () => {
     const session = await signIn();

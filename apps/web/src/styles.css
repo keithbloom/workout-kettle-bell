@@ -425,8 +425,15 @@ button {
   border-radius: 12px;
   border: 1.5px solid var(--line);
   background: var(--surface);
+  /* Explicit, not inherited: inside a coloured band the inherited colour is
+     the band's foreground, which on this white background is invisible. */
+  color: var(--text);
   font-weight: 700;
   font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 .status {
   margin-top: 10px;
@@ -840,4 +847,175 @@ button {
   .p-inner {
     max-width: 640px;
   }
+}
+
+/* ---------- builder ---------- */
+
+.field-row {
+  display: block;
+  margin: 0 0 12px;
+}
+.field-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  opacity: 0.85;
+}
+.field {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 16px; /* Anything smaller makes iOS zoom on focus. */
+}
+textarea.field {
+  min-height: 84px;
+  resize: vertical;
+}
+.fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0 12px;
+}
+
+.builder-band .band-body {
+  display: block;
+}
+.builder-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 0;
+}
+.section-name {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.block {
+  margin: 12px 0;
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(128, 128, 128, 0.18);
+}
+.block-head {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  justify-content: space-between;
+}
+.block-head .field-row {
+  flex: 1;
+}
+
+.items {
+  margin-top: 8px;
+}
+.item {
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+}
+.item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 17px;
+}
+.item-controls {
+  display: flex;
+  gap: 4px;
+  flex: none;
+}
+.item-controls button {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1;
+}
+.item-controls button:disabled {
+  opacity: 0.4;
+}
+.btn2.danger {
+  border-color: #d9381e;
+  color: #d9381e;
+}
+
+/* The exercise picker, a full-screen sheet. */
+.sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--bg);
+  color: var(--text);
+  padding: calc(env(safe-area-inset-top, 0px) + 16px) 18px
+    calc(env(safe-area-inset-bottom, 0px) + 16px);
+}
+.sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.sheet-head h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+}
+.sheet-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.pick {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 14px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+}
+.pick-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 17px;
+}
+.pick-top span {
+  opacity: 0.75;
+  white-space: nowrap;
+}
+.pick-desc {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  line-height: 1.4;
+  opacity: 0.8;
+}
+
+.row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 20px;
 }

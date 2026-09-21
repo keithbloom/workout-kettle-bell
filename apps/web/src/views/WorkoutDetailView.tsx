@@ -1,8 +1,14 @@
 import { useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { Link, useNavigate, useParams } from 'react-router';
 import { compileWorkout, lengthOf } from '@kb/core';
 import type { CompiledWorkout } from '@kb/core';
-import { useExercises, useHistory, useRecordSession, useWorkout } from '../api/queries.js';
+import {
+  useDeleteWorkout,
+  useExercises,
+  useHistory,
+  useRecordSession,
+  useWorkout,
+} from '../api/queries.js';
 import { Player, weekLine } from '../player/Player.js';
 import { ChevronIcon } from '../components/icons.js';
 import { plural } from '../lib/format.js';
@@ -19,6 +25,8 @@ export function WorkoutDetailView() {
   const exercises = useExercises();
   const history = useHistory();
   const record = useRecordSession();
+  const remove = useDeleteWorkout();
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
 
   const [open, setOpen] = useState<string | null>(null);
   const [run, setRun] = useState<CompiledWorkout | null>(null);
@@ -26,7 +34,7 @@ export function WorkoutDetailView() {
 
   const compiled = useMemo(() => {
     if (!workout.data || !exercises.data) return null;
-    return compileWorkout(workout.data, exercises.data);
+    return compileWorkout(workout.data.workout, exercises.data);
   }, [workout.data, exercises.data]);
 
   if (workout.isPending || exercises.isPending) {
@@ -46,7 +54,7 @@ export function WorkoutDetailView() {
     );
   }
 
-  const definition = workout.data;
+  const { workout: definition, canEdit } = workout.data;
   const catalogue = exercises.data;
   const bySlug = new Map(catalogue.map((e) => [e.slug, e]));
 
@@ -79,6 +87,31 @@ export function WorkoutDetailView() {
         {compiled.segments.map((segment, i) => (
           <i key={i} data-phase={segment.phase} style={{ flex: Math.max(segment.totalSec, 1) }} />
         ))}
+      </div>
+
+      <div className="row-actions">
+        {canEdit ? (
+          <>
+            <Link to={`/workouts/${definition.id}/edit`} className="btn2">
+              Edit
+            </Link>
+            <button
+              type="button"
+              className="btn2 danger"
+              onClick={() =>
+                confirmingDelete
+                  ? remove.mutate(definition.id, { onSuccess: () => void navigate('/') })
+                  : setConfirmingDelete(true)
+              }
+            >
+              {confirmingDelete ? 'Tap again to delete' : 'Delete'}
+            </button>
+          </>
+        ) : (
+          <Link to={`/workouts/${definition.id}/copy`} className="btn2">
+            Make my own copy
+          </Link>
+        )}
       </div>
 
       <p className="hist">

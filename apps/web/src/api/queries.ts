@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { WorkoutDraft } from '@kb/core';
 import { api } from './client.js';
 
 /**
@@ -19,7 +20,7 @@ export function useWorkouts() {
 export function useWorkout(id: string | undefined) {
   return useQuery({
     queryKey: ['workout', id],
-    queryFn: async () => (await api.workout(id!)).workout,
+    queryFn: () => api.workout(id!),
     enabled: !!id,
     ...LONG_LIVED,
   });
@@ -37,6 +38,43 @@ export function useHistory() {
   return useQuery({
     queryKey: ['sessions'],
     queryFn: () => api.sessions(),
+  });
+}
+
+export function useSaveWorkout() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, draft }: { id?: string; draft: WorkoutDraft }) =>
+      id ? api.updateWorkout(id, draft) : api.createWorkout(draft),
+    // The individual workout has to be invalidated as well as the list.
+    // Workouts are cached for half an hour, so without this an edit saves and
+    // then the detail screen shows the version it had before.
+    onSuccess: (result) => {
+      void queryClient.invalidateQueries({ queryKey: ['workouts'] });
+      void queryClient.invalidateQueries({ queryKey: ['workout', result.id] });
+    },
+  });
+}
+
+export function useDeleteWorkout() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: api.deleteWorkout,
+    onSuccess: (_result, id) => {
+      void queryClient.invalidateQueries({ queryKey: ['workouts'] });
+      queryClient.removeQueries({ queryKey: ['workout', id] });
+    },
+  });
+}
+
+export function useCopyWorkout() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: api.copyWorkout,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['workouts'] }),
   });
 }
 

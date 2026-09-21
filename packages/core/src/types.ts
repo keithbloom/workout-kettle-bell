@@ -11,15 +11,14 @@
  * and the player can never disagree.
  */
 
-export type Phase = 'warmup' | 'strength' | 'endurance' | 'core' | 'cooldown';
+/**
+ * The list is the source of truth and the type is derived from it, so the Zod
+ * contract can use `z.enum(PHASES)` and still infer the literal union rather
+ * than widening to `string`.
+ */
+export const PHASES = ['warmup', 'strength', 'endurance', 'core', 'cooldown'] as const;
 
-export const PHASES: readonly Phase[] = [
-  'warmup',
-  'strength',
-  'endurance',
-  'core',
-  'cooldown',
-] as const;
+export type Phase = (typeof PHASES)[number];
 
 /**
  * How an exercise is worked through.

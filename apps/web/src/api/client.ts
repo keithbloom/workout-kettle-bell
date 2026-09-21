@@ -1,4 +1,4 @@
-import type { Exercise, WorkoutDefinition } from '@kb/core';
+import type { Exercise, WorkoutDefinition, WorkoutDraft } from '@kb/core';
 
 /**
  * The API client.
@@ -69,7 +69,8 @@ export const api = {
 
   workouts: () => request<{ workouts: WorkoutSummary[] }>('/api/workouts'),
 
-  workout: (id: string) => request<{ workout: WorkoutDefinition }>(`/api/workouts/${id}`),
+  workout: (id: string) =>
+    request<{ workout: WorkoutDefinition; canEdit: boolean }>(`/api/workouts/${id}`),
 
   sessions: () => request<{ sessions: SessionRecord[]; thisWeek: number }>('/api/sessions'),
 
@@ -85,6 +86,20 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(body),
     }),
+
+  createWorkout: (draft: WorkoutDraft) =>
+    request<{ id: string }>('/api/workouts', { method: 'POST', body: JSON.stringify(draft) }),
+
+  updateWorkout: (id: string, draft: WorkoutDraft) =>
+    request<{ id: string }>(`/api/workouts/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(draft),
+    }),
+
+  deleteWorkout: (id: string) => request<void>(`/api/workouts/${id}`, { method: 'DELETE' }),
+
+  copyWorkout: (id: string) =>
+    request<{ id: string }>(`/api/workouts/${id}/copy`, { method: 'POST', body: '{}' }),
 
   signInWithPassword: (email: string, password: string) =>
     request<unknown>('/api/auth/sign-in/email', {
