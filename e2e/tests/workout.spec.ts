@@ -25,7 +25,26 @@ test.describe('signed out', () => {
     await page.goto('/');
 
     await expect(page.getByRole('heading', { name: 'Kettlebell and mat' })).toBeVisible();
-    await expect(page.getByRole('link', { name: /continue with google/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /continue with google/i })).toBeVisible();
+  });
+
+  /*
+   * Stops short of Google's consent screen — that needs a real person — but
+   * covers everything up to it, which is where this went wrong once already:
+   * the button was a link, the browser sent a GET, and Better Auth (which only
+   * answers a POST here) returned 404.
+   */
+  test('the Google button heads to Google', async ({ page }) => {
+    await page.route('https://accounts.google.com/**', (route) => route.abort());
+    const consent = page.waitForRequest(/accounts\.google\.com/);
+
+    await page.goto('/');
+    await page.getByRole('button', { name: /continue with google/i }).click();
+
+    const url = new URL((await consent).url());
+    expect(url.searchParams.get('client_id')).toBeTruthy();
+    expect(url.searchParams.get('redirect_uri')).toContain('/api/auth/callback/google');
+    expect(url.searchParams.get('scope')).toContain('email');
   });
 });
 

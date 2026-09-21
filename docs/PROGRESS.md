@@ -141,6 +141,11 @@ path while still exercising the real session cookie.
 - **The countdown only beeps on steps longer than three seconds**, or a
   three-second prep would beep from the moment it began. Ported from the
   original, and easy to lose.
+- **Better Auth's social sign-in is a POST, not a link.** You POST
+  `/api/auth/sign-in/social` with `{provider, callbackURL}`, it mints the state
+  and PKCE challenge, and hands back a URL to send the browser to. An `<a href>`
+  to the same path is a GET, which has no route and 404s — which is exactly
+  what shipped once.
 
 ## Next: phase 4, the workout builder
 
@@ -159,9 +164,10 @@ Then phase 5 (offline and sync), 6 (deploy), 7 (retire `legacy/`).
 
 ## Still outstanding
 
-- **Google sign-in has never been exercised end to end.** The credentials are
-  in `apps/api/.dev.vars`, but every test signs in with a password instead. Try
-  the "Continue with Google" button by hand before relying on it.
+- **Google sign-in is covered up to the consent screen, not through it.** An
+  end-to-end test checks the button reaches Google with a valid `client_id` and
+  `redirect_uri`; nothing can click Google's consent screen, so the callback
+  and the first real sign-in are still unverified.
 - **Google OAuth client** — configured locally. Redirect URIs are
   `<API origin>/api/auth/callback/google`, i.e.
   `http://localhost:8787/api/auth/callback/google` locally. Keep the consent

@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { googleSignInUrl } from '../api/client.js';
+import { startGoogleSignIn } from '../api/client.js';
 import { useSignIn, useSignUp } from '../auth/useAuth.js';
 
 /**
@@ -15,10 +15,25 @@ export function SignInView({ allowPassword }: { allowPassword: boolean }) {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
 
+  const [googlePending, setGooglePending] = useState(false);
+  const [googleFailed, setGoogleFailed] = useState(false);
+
   const signIn = useSignIn();
   const signUp = useSignUp();
   const pending = signIn.isPending || signUp.isPending;
   const error = signIn.error ?? signUp.error;
+
+  const google = async () => {
+    setGooglePending(true);
+    setGoogleFailed(false);
+    try {
+      await startGoogleSignIn();
+    } catch {
+      // Leaves us on this page rather than a blank one, with a way to retry.
+      setGooglePending(false);
+      setGoogleFailed(true);
+    }
+  };
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -34,13 +49,14 @@ export function SignInView({ allowPassword }: { allowPassword: boolean }) {
       </p>
 
       <div className="start-wrap" style={{ position: 'static' }}>
-        <a
-          className="cta"
-          href={googleSignInUrl()}
-          style={{ display: 'grid', placeItems: 'center', textDecoration: 'none' }}
-        >
-          Continue with Google
-        </a>
+        <button type="button" className="cta" onClick={google} disabled={googlePending}>
+          {googlePending ? 'Taking you to Google…' : 'Continue with Google'}
+        </button>
+        {googleFailed && (
+          <p className="status" role="alert">
+            Couldn&rsquo;t reach Google just then. Try again.
+          </p>
+        )}
       </div>
 
       {allowPassword && (

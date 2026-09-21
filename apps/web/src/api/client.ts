@@ -101,7 +101,22 @@ export const api = {
   signOut: () => request<unknown>('/api/auth/sign-out', { method: 'POST', body: '{}' }),
 };
 
-/** Where to send the browser to sign in with Google. */
-export function googleSignInUrl(): string {
-  return '/api/auth/sign-in/social?provider=google';
+/**
+ * Begin the Google sign-in dance.
+ *
+ * Better Auth does not expose a link you can navigate to: you POST, it mints a
+ * state and a PKCE challenge, and it hands back the consent URL to send the
+ * browser to. A plain `<a href>` to the same path is a GET, which has no route
+ * and returns 404.
+ */
+export async function startGoogleSignIn(): Promise<void> {
+  const { url } = await request<{ url: string; redirect: boolean }>('/api/auth/sign-in/social', {
+    method: 'POST',
+    body: JSON.stringify({
+      provider: 'google',
+      callbackURL: `${window.location.origin}/`,
+    }),
+  });
+
+  window.location.href = url;
 }
