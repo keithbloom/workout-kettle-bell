@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 /**
- * End-to-end tests against the real stack: the Vite app in front of the Worker
+ * End-to-end tests against the real stack: the built app in front of the Worker
  * in front of a local D1.
  *
  * Playwright starts both servers itself, so `pnpm --filter @kb/e2e test` is the
@@ -16,7 +16,7 @@ export default defineConfig({
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : [['list']],
 
   use: {
-    baseURL: 'http://localhost:5173',
+    baseURL: 'http://localhost:4173',
     trace: 'retain-on-failure',
     // A phone is the target; test at that size by default.
     ...devices['Pixel 7'],
@@ -31,11 +31,14 @@ export default defineConfig({
       timeout: 120_000,
     },
     {
-      command: 'pnpm --filter @kb/web dev',
-      url: 'http://localhost:5173',
-      reuseExistingServer: !process.env.CI,
+      // Built, not dev-served: the service worker and the precached shell only
+      // exist in a production build, and they are what makes the app work
+      // without a signal. Testing the dev server would skip all of that.
+      command: 'pnpm --filter @kb/web build && pnpm --filter @kb/web preview',
+      url: 'http://localhost:4173',
+      reuseExistingServer: false,
       cwd: '..',
-      timeout: 120_000,
+      timeout: 180_000,
     },
   ],
 });

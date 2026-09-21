@@ -1,6 +1,6 @@
 # Where the rewrite has got to
 
-Last updated 2026-09-21, end of phase 4.
+Last updated 2026-09-21, end of phase 5.
 
 The approved plan is [`plan.md`](plan.md). This file records what is actually
 built, what was decided along the way, and what to do next — so a session
@@ -16,9 +16,10 @@ app keeps working. Nothing merged to `main` yet.
 - **Phase 2 — backend and auth: done.** `apps/api`, 51 tests.
 - **Phase 3 — front end: done.** `apps/web`, plus the Playwright suite.
 - **Phase 4 — the workout builder: done.** Build, edit, copy and delete.
-- **Phase 5 — offline and sync: not started.** This is the next piece of work.
+- **Phase 5 — offline and sync: done.** Installable, runs without a signal.
+- **Phase 6 — deploy: not started.** This is the next piece of work.
 
-184 unit and integration tests, and 16 end-to-end tests against the real stack.
+194 unit and integration tests, and 19 end-to-end tests against the built app.
 `pnpm lint`, `pnpm format:check` and `pnpm typecheck` are clean.
 
 ## Decisions taken when the plan was approved
@@ -118,12 +119,37 @@ or a keyboard.
 `GET /api/workouts/:id` returns `canEdit` alongside the workout, so the client
 is told whether the Edit button belongs on screen rather than inferring it.
 
+### Offline
+
+The old app worked without a signal and so does this one, but now with an
+account behind it.
+
+- **The shell** is precached by a service worker (`vite-plugin-pwa`), so the
+  app opens with no network. The manifest and icons come from the original.
+- **The data** is the TanStack Query cache persisted into IndexedDB: workouts,
+  the exercise catalogue, and `me`. That last one matters — sign-in is
+  required, so without a cached user an offline app decides you are signed out
+  and shows the sign-in screen, in a gym, with no way past it. A network
+  failure leaves the cached user in place; a real 401 signs you out properly.
+- **Finished sessions** go to an outbox in IndexedDB (`src/offline/outbox.ts`)
+  _before_ any attempt to send them, so a session survives a closed tab or a
+  dead battery. `useSync` drains it on open, on `online`, and when the tab
+  returns to the foreground — a phone that has been in a pocket often never
+  fires `online`, because as far as it knows it was only asleep.
+
+The API upserts on `(user_id, client_id)`, so a replayed flush is a no-op. A
+4xx is treated as permanent and the session is dropped, because retrying cannot
+help and one unacceptable session would otherwise block the queue forever.
+
 ### `e2e` — Playwright
 
-Drives the real app against the real Worker and a local D1. Playwright starts
-both servers itself, so `pnpm e2e` is the whole command. Tests sign in with an
-email and password, which keeps Google and its consent screen out of the test
-path while still exercising the real session cookie.
+Drives the **built** app against the real Worker and a local D1. Built, not
+dev-served: the service worker and everything offline only exist in a
+production build, so testing the dev server would skip the lot. Playwright
+builds and starts both servers itself, so `pnpm e2e` is the whole command.
+
+Tests sign in with an email and password, which keeps Google and its consent
+screen out of the test path while still exercising the real session cookie.
 
 `pnpm test` deliberately excludes these, since they need live servers.
 
@@ -161,6 +187,10 @@ path while still exercising the real session cookie.
 - **The countdown only beeps on steps longer than three seconds**, or a
   three-second prep would beep from the moment it began. Ported from the
   original, and easy to lose.
+- **`APP_URL` is a comma-separated list of origins.** Better Auth checks the
+  Origin and the `callbackURL` against it, and rejects anything else with
+  `Invalid callbackURL` — which does not obviously point at a port. Local
+  development needs both 5173 (dev) and 4173 (preview, used by the tests).
 - **Mutations must invalidate the individual workout, not just the list.**
   Workouts are cached for half an hour, so an edit that only invalidates
   `['workouts']` saves correctly and then shows the previous version on the
@@ -174,21 +204,27 @@ path while still exercising the real session cookie.
   to the same path is a GET, which has no route and 404s — which is exactly
   what shipped once.
 
-## Next: phase 5, offline and sync
+## Next: phase 6, deploy
 
-1. `vite-plugin-pwa` for the shell, and a manifest and icons (the originals are
-   in `legacy/`).
-2. Persist the TanStack Query cache for workouts and the catalogue into
-   IndexedDB, so a signed-in user can open the app and start with no signal.
-   `LONG_LIVED` in `src/api/queries.ts` already holds them long enough.
-3. Completed sessions into an IndexedDB outbox keyed by `clientId`, flushed on
-   reconnect. The API already upserts on `(user_id, client_id)`, so a replayed
-   flush is a no-op — that is tested.
-4. An end-to-end test using `context.setOffline(true)`: run a session offline,
-   reconnect, and check it appears in history.
+This is the phase that needs your Cloudflare account.
 
-Then phase 6 (deploy) and 7 (retire `legacy/`). The account UI noted above
-wants doing around here too.
+1. `wrangler d1 create kb-db`, and put the real id in `apps/api/wrangler.jsonc`.
+2. `wrangler secret put` for `BETTER_AUTH_SECRET`, `GOOGLE_CLIENT_ID` and
+   `GOOGLE_CLIENT_SECRET`. These never go near GitHub.
+3. A `CLOUDFLARE_API_TOKEN` as a GitHub secret — the only one CI needs.
+4. Deploy `apps/web` to Pages and `apps/api` to Workers from Actions, running
+   `wrangler d1 migrations apply --remote` before the API deploy.
+5. Set the production `APP_URL` to the single Pages origin, and add that
+   origin's `/api/auth/callback/google` to the Google client's redirect URIs.
+6. A smoke test against the deployed URL after each production deploy.
+
+**Decide first:** the app and the API want to be same-origin, which is what
+makes the session cookie a plain first-party cookie. Pages and Workers are
+different hostnames by default, so this needs either a Worker route in front of
+Pages or a custom domain with both mounted. Worth settling before wiring the
+deploy.
+
+Then phase 7 (retire `legacy/`). The account UI noted above is still wanted.
 
 ## Wanted: an account presence in the UI
 

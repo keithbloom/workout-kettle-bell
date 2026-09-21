@@ -1019,3 +1019,15 @@ textarea.field {
   gap: 8px;
   margin: 0 0 20px;
 }
+
+/* Shown when finished sessions are still waiting to reach the server. */
+.sync {
+  margin: 0;
+  padding: 10px 18px calc(10px);
+  padding-top: calc(env(safe-area-inset-top, 0px) + 10px);
+  background: #f4b63f;
+  color: #1d1606;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}

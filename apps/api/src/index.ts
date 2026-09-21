@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
-import { createAuth } from './auth.js';
+import { appOrigins, createAuth } from './auth.js';
 import type { Env } from './env.js';
 import { api } from './routes/api.js';
 
@@ -8,7 +8,7 @@ const app = new Hono<{ Bindings: Env }>();
 
 app.use('/api/*', (c, next) =>
   cors({
-    origin: c.env.APP_URL,
+    origin: appOrigins(c.env),
     credentials: true,
     allowHeaders: ['Content-Type'],
     allowMethods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],

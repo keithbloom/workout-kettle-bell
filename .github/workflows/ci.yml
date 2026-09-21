@@ -70,8 +70,10 @@ jobs:
       - name: Install Playwright browser
         run: pnpm --filter @kb/e2e exec playwright install --with-deps chromium
 
-      # Drives the real app against the real Worker and a local D1. Playwright
-      # starts both servers itself; the database needs its migrations first.
+      # Drives the built app against the real Worker and a local D1 — built,
+      # because the service worker and the offline behaviour only exist in a
+      # production build. Playwright builds and starts both servers itself;
+      # the database needs its migrations first.
       - name: Prepare the database
         run: pnpm --filter @kb/api db:migrate:local
 

@@ -8,6 +8,20 @@ import type { Env } from './env.js';
 const SESSION_LIFETIME_SEC = 60 * 60 * 24 * 90;
 
 /**
+ * Where the browser app may be served from.
+ *
+ * A list rather than one value because development runs it on two ports: the
+ * dev server, and the preview server the end-to-end tests drive. Better Auth
+ * checks the Origin header on state-changing requests, so an origin missing
+ * from here fails sign-in with no obvious clue why. Production sets one.
+ */
+export function appOrigins(env: Pick<Env, 'APP_URL'>): string[] {
+  return env.APP_URL.split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+}
+
+/**
  * Built per request rather than once at module scope: on Workers the bindings
  * and secrets arrive with the request, so there is no env to read at import
  * time.
@@ -20,7 +34,7 @@ export function createAuth(env: Env, requestUrl: string) {
     secret: env.BETTER_AUTH_SECRET,
     baseURL: new URL(requestUrl).origin,
     basePath: '/api/auth',
-    trustedOrigins: [env.APP_URL],
+    trustedOrigins: appOrigins(env),
     socialProviders: {
       google: {
         clientId: env.GOOGLE_CLIENT_ID,

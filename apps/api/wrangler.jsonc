@@ -17,6 +17,8 @@
     },
   ],
   "vars": {
-    "APP_URL": "http://localhost:5173",
+    // Both local ports: the dev server, and the preview server the end-to-end
+    // tests drive. Production overrides this with a single origin.
+    "APP_URL": "http://localhost:5173,http://localhost:4173",
   },
 }

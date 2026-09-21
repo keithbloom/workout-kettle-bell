@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { WorkoutDraft } from '@kb/core';
 import { api } from './client.js';
+import { enqueue, flush, type PendingSession } from '../offline/outbox.js';
+import { OUTBOX_KEY } from '../offline/useSync.js';
 
 /**
  * Workouts and the catalogue change rarely and are needed to start a session,
@@ -78,11 +80,26 @@ export function useCopyWorkout() {
   });
 }
 
+/**
+ * Record a finished session.
+ *
+ * Writes to the outbox before trying to send. A workout finished in a basement
+ * with no signal is already safely on disk by the time the request is even
+ * attempted, and the same record is what gets retried later.
+ */
 export function useRecordSession() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: api.recordSession,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['sessions'] }),
+    mutationFn: async (session: PendingSession) => {
+      await enqueue(session);
+      return flush((s) => api.recordSession(s));
+    },
+    // Settled, not success: a session that could not be sent still changed
+    // what is on the device, and the banner needs to say so.
+    onSettled: () => {
+      void queryClient.invalidateQueries({ queryKey: ['sessions'] });
+      void queryClient.invalidateQueries({ queryKey: OUTBOX_KEY });
+    },
   });
 }

@@ -1,5 +1,7 @@
 import { Route, Routes } from 'react-router';
 import { useCurrentUser } from './auth/useAuth.js';
+import { useSync } from './offline/useSync.js';
+import { plural } from './lib/format.js';
 import { BuilderView } from './builder/BuilderView.js';
 import { Nav } from './components/Nav.js';
 import { SignInView } from './views/SignInView.js';
@@ -15,6 +17,7 @@ import { WorkoutsView } from './views/WorkoutsView.js';
  */
 export function App() {
   const user = useCurrentUser();
+  const { waiting } = useSync();
 
   if (user.isPending) {
     return (
@@ -36,6 +39,11 @@ export function App() {
 
   return (
     <>
+      {waiting > 0 && (
+        <p className="sync" role="status">
+          {plural(waiting, 'session')} saved on this device, waiting for a connection.
+        </p>
+      )}
       <main>
         <Routes>
           <Route path="/" element={<WorkoutsView />} />
