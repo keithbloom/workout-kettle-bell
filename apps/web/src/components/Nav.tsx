@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router';
-import { SettingsIcon, TimerIcon, WorkoutIcon } from './icons.js';
+import { SettingsIcon, TimerIcon, WorkoutIcon } from './icons';
 
 /** The bottom tab bar, thumb-reachable the way the original was. */
 export function Nav() {

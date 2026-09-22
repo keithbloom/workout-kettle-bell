@@ -9,7 +9,7 @@ import type {
   WorkoutDefinition,
   WorkoutDraft,
 } from '@kb/core';
-import * as schema from '../db/schema.js';
+import * as schema from '../db/schema';
 
 export type Db = ReturnType<typeof drizzle<typeof schema>>;
 

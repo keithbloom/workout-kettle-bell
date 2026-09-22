@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { compileInterval } from '../src/compile-interval.js';
-import type { IntervalConfig } from '../src/types.js';
+import { compileInterval } from '../src/compile-interval';
+import type { IntervalConfig } from '../src/types';
 
 const config: IntervalConfig = { workSec: 40, restSec: 20, rounds: 3, prepSec: 5 };
 

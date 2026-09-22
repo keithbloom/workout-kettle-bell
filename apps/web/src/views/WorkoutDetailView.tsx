@@ -8,10 +8,10 @@ import {
   useHistory,
   useRecordSession,
   useWorkout,
-} from '../api/queries.js';
-import { Player, weekLine } from '../player/Player.js';
-import { ChevronIcon } from '../components/icons.js';
-import { plural } from '../lib/format.js';
+} from '../api/queries';
+import { Player, weekLine } from '../player/Player';
+import { ChevronIcon } from '../components/icons';
+import { plural } from '../lib/format';
 
 /**
  * One workout, laid out as the original app laid out its only workout: a

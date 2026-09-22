@@ -1,8 +1,8 @@
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { drizzle } from 'drizzle-orm/d1';
-import * as schema from './db/schema.js';
-import type { Env } from './env.js';
+import * as schema from './db/schema';
+import type { Env } from './env';
 
 /** Ninety days: a signed-in phone should not log out because it went offline. */
 const SESSION_LIFETIME_SEC = 60 * 60 * 24 * 90;

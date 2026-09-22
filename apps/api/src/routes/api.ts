@@ -2,9 +2,9 @@ import { Hono } from 'hono';
 import { drizzle } from 'drizzle-orm/d1';
 import { z } from 'zod';
 import { workoutDraftSchema } from '@kb/core';
-import * as schema from '../db/schema.js';
-import type { Env } from '../env.js';
-import { requireUser, type AuthedVars } from '../middleware/require-user.js';
+import * as schema from '../db/schema';
+import type { Env } from '../env';
+import { requireUser, type AuthedVars } from '../middleware/require-user';
 import {
   canRead,
   canWrite,
@@ -14,8 +14,8 @@ import {
   listExercises,
   listWorkoutsFor,
   replaceWorkout,
-} from '../repo/workouts.js';
-import { countSessionsThisWeek, listSessions, recordSession } from '../repo/sessions.js';
+} from '../repo/workouts';
+import { countSessionsThisWeek, listSessions, recordSession } from '../repo/sessions';
 
 /**
  * Everything behind a session. Mounted under /api, with `requireUser` applied

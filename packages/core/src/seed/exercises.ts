@@ -4,7 +4,7 @@
  * Generated from the original app by scripts/extract-legacy-exercises.mjs —
  * edit that source, or this file directly once the legacy app is retired.
  */
-import type { Exercise } from '../types.js';
+import type { Exercise } from '../types';
 
 export const SEED_EXERCISES: readonly Exercise[] = [
   {

@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { WorkoutDraft } from '@kb/core';
-import { api } from './client.js';
-import { enqueue, flush, type PendingSession } from '../offline/outbox.js';
-import { OUTBOX_KEY } from '../offline/useSync.js';
+import { api } from './client';
+import { enqueue, flush, type PendingSession } from '../offline/outbox';
+import { OUTBOX_KEY } from '../offline/useSync';
 
 /**
  * Workouts and the catalogue change rarely and are needed to start a session,

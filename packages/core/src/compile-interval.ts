@@ -1,5 +1,5 @@
-import { withTimings } from './timings.js';
-import type { CompiledWorkout, IntervalConfig, Step } from './types.js';
+import { withTimings } from './timings';
+import type { CompiledWorkout, IntervalConfig, Step } from './types';
 
 /**
  * Turn interval-timer settings into the same step list the workout player

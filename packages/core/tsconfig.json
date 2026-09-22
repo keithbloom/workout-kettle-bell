@@ -1,7 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "dist",
+    // Never emitted: `exports` points at the TypeScript source and both
+    // consumers are bundlers, so there is no build step to keep in step.
+    "noEmit": true,
     "rootDir": ".",
     "types": ["vitest/globals"]
   },

@@ -1,5 +1,5 @@
 import type { BlockKind, Exercise, Side } from '@kb/core';
-import { BLOCK_KIND_LABELS, type DraftBlock } from './draft.js';
+import { BLOCK_KIND_LABELS, type DraftBlock } from './draft';
 
 /** Which numeric settings each kind of block actually uses. */
 const FIELDS: Record<BlockKind, { key: keyof DraftBlock; label: string; min: number }[]> = {

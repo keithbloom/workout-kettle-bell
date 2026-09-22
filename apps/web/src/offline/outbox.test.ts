@@ -1,6 +1,6 @@
 import 'fake-indexeddb/auto';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { clearOutbox, enqueue, flush, pending, type PendingSession } from './outbox.js';
+import { clearOutbox, enqueue, flush, pending, type PendingSession } from './outbox';
 
 /**
  * The outbox is the thing standing between a finished workout and losing it.

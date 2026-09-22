@@ -16,7 +16,7 @@ import {
   updateBlock,
   updateItem,
   updateSection,
-} from './draft.js';
+} from './draft';
 
 const catalogue: Exercise[] = [
   { slug: 'goblet', name: 'Goblet squat', description: 'Chest tall.', defaultDose: '45 sec' },

@@ -2,10 +2,10 @@ import { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { compileWorkout, workoutDraftSchema, PHASES } from '@kb/core';
 import type { BlockKind, Phase } from '@kb/core';
-import { useExercises, useSaveWorkout, useWorkout } from '../api/queries.js';
-import { formatDuration } from '../lib/format.js';
-import { BlockEditor } from './BlockEditor.js';
-import { ExercisePicker } from './ExercisePicker.js';
+import { useExercises, useSaveWorkout, useWorkout } from '../api/queries';
+import { formatDuration } from '../lib/format';
+import { BlockEditor } from './BlockEditor';
+import { ExercisePicker } from './ExercisePicker';
 import {
   addBlock,
   addItem,
@@ -24,7 +24,7 @@ import {
   BLOCK_KIND_LABELS,
   PHASE_TITLES,
   type Draft,
-} from './draft.js';
+} from './draft';
 
 /** Which block a newly picked exercise belongs to. */
 interface PickerTarget {

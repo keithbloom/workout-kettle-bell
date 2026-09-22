@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { workoutDefinitionSchema, workoutDraftSchema, LIMITS } from '../src/schema.js';
-import { KETTLEBELL_AND_MAT } from '../src/seed/kettlebell-and-mat.js';
+import { workoutDefinitionSchema, workoutDraftSchema, LIMITS } from '../src/schema';
+import { KETTLEBELL_AND_MAT } from '../src/seed/kettlebell-and-mat';
 
 /**
  * The loose shapes the tests build by hand: every field optional and writable,

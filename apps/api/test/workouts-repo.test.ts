@@ -3,8 +3,8 @@ import { describe, expect, it } from 'vitest';
 import { drizzle } from 'drizzle-orm/d1';
 import { compileWorkout, KETTLEBELL_AND_MAT, SEED_EXERCISES } from '@kb/core';
 import type { WorkoutDefinition } from '@kb/core';
-import * as schema from '../src/db/schema.js';
-import { findWorkoutDefinition, listExercises, listWorkoutsFor } from '../src/repo/workouts.js';
+import * as schema from '../src/db/schema';
+import { findWorkoutDefinition, listExercises, listWorkoutsFor } from '../src/repo/workouts';
 
 /**
  * The seed migration and the mapping back out are checked together, against

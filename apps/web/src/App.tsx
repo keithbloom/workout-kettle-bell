@@ -1,14 +1,14 @@
 import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router';
-import { useCurrentUser } from './auth/useAuth.js';
-import { useSync } from './offline/useSync.js';
-import { plural } from './lib/format.js';
-import { Nav } from './components/Nav.js';
-import { SignInView } from './views/SignInView.js';
-import { SettingsView } from './views/SettingsView.js';
-import { TimerView } from './views/TimerView.js';
-import { WorkoutDetailView } from './views/WorkoutDetailView.js';
-import { WorkoutsView } from './views/WorkoutsView.js';
+import { useCurrentUser } from './auth/useAuth';
+import { useSync } from './offline/useSync';
+import { plural } from './lib/format';
+import { Nav } from './components/Nav';
+import { SignInView } from './views/SignInView';
+import { SettingsView } from './views/SettingsView';
+import { TimerView } from './views/TimerView';
+import { WorkoutDetailView } from './views/WorkoutDetailView';
+import { WorkoutsView } from './views/WorkoutsView';
 
 /*
  * The builder is loaded on demand. It pulls in the Zod contract, which is the
@@ -17,7 +17,7 @@ import { WorkoutsView } from './views/WorkoutsView.js';
  * worker, so building a workout offline keeps working.
  */
 const BuilderView = lazy(() =>
-  import('./builder/BuilderView.js').then((m) => ({ default: m.BuilderView })),
+  import('./builder/BuilderView').then((m) => ({ default: m.BuilderView })),
 );
 
 const Loading = () => (

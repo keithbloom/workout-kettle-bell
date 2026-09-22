@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
-import { createAuth } from './auth.js';
-import type { Env } from './env.js';
-import { api } from './routes/api.js';
+import { createAuth } from './auth';
+import type { Env } from './env';
+import { api } from './routes/api';
 
 /**
  * The whole application: this Worker serves the built web app as static assets

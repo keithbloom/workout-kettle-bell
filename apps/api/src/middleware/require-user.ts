@@ -1,6 +1,6 @@
 import type { MiddlewareHandler } from 'hono';
-import { createAuth } from '../auth.js';
-import type { Env } from '../env.js';
+import { createAuth } from '../auth';
+import type { Env } from '../env';
 
 export interface AuthedUser {
   id: string;

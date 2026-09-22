@@ -46,3 +46,7 @@ regeneration checks.
 
 British English in prose and UI copy. Comments explain why, not what. Match the
 surrounding code's density and idiom.
+
+Relative imports carry no file extension (`from './session'`). Everything here
+resolves through a bundler, so the `.js` suffix the ESM spec asks for would be
+noise.

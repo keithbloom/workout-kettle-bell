@@ -11,7 +11,7 @@ import {
   type SessionEvent,
   type SessionResult,
   type SessionState,
-} from './session.js';
+} from './session';
 import {
   ensureAudio,
   playSound,
@@ -20,8 +20,8 @@ import {
   speak,
   stopSpeaking,
   vibrate,
-} from './cues.js';
-import { readSettings } from '../settings/useSettings.js';
+} from './cues';
+import { readSettings } from '../settings/useSettings';
 
 const TICK_MS = 100;
 /** How long the halfway banner stays up. */

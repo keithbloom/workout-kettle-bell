@@ -1,6 +1,6 @@
 import { and, desc, eq, gte } from 'drizzle-orm';
-import * as schema from '../db/schema.js';
-import type { Db } from './workouts.js';
+import * as schema from '../db/schema';
+import type { Db } from './workouts';
 
 export interface SessionInput {
   /** Minted on the device before the run, so a replayed sync is a no-op. */

@@ -1,8 +1,8 @@
-import { useCurrentUser, useSignOut } from '../auth/useAuth.js';
-import { useHistory } from '../api/queries.js';
-import { ensureAudio, playSound, speak, vibrate } from '../player/cues.js';
-import { useSettings, type Settings } from '../settings/useSettings.js';
-import { plural } from '../lib/format.js';
+import { useCurrentUser, useSignOut } from '../auth/useAuth';
+import { useHistory } from '../api/queries';
+import { ensureAudio, playSound, speak, vibrate } from '../player/cues';
+import { useSettings, type Settings } from '../settings/useSettings';
+import { plural } from '../lib/format';
 
 const TOGGLES: { key: keyof Settings; label: string; hint: string }[] = [
   { key: 'sound', label: 'Sound', hint: 'Beeps for the last three seconds and at every change.' },

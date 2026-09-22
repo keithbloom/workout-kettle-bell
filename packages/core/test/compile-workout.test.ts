@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { compileWorkout } from '../src/compile-workout.js';
-import type { Block, Exercise, Section, WorkoutDefinition } from '../src/types.js';
+import { compileWorkout } from '../src/compile-workout';
+import type { Block, Exercise, Section, WorkoutDefinition } from '../src/types';
 
 const catalogue: Exercise[] = [
   {

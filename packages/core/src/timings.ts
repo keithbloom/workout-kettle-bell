@@ -1,4 +1,4 @@
-import type { CompiledWorkout, Segment, Step } from './types.js';
+import type { CompiledWorkout, Segment, Step } from './types';
 
 /** How long a step occupies the progress bar: real time, or the estimate. */
 export function lengthOf(step: Step): number {

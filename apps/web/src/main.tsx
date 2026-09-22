@@ -5,7 +5,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { del, get, set } from 'idb-keyval';
-import { App } from './App.js';
+import { App } from './App';
 import './styles.css';
 
 const DAY = 1000 * 60 * 60 * 24;

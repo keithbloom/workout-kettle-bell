@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { compileInterval } from '@kb/core';
 import type { CompiledWorkout, IntervalConfig } from '@kb/core';
-import { Player } from '../player/Player.js';
-import { formatDuration, plural } from '../lib/format.js';
+import { Player } from '../player/Player';
+import { formatDuration, plural } from '../lib/format';
 
 const PRESETS = [
   { label: 'Tabata 20/10 × 8', workSec: 20, restSec: 10, rounds: 8 },

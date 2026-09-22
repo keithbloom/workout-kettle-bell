@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
-import { startGoogleSignIn } from '../api/client.js';
-import { useSignIn, useSignUp } from '../auth/useAuth.js';
+import { startGoogleSignIn } from '../api/client';
+import { useSignIn, useSignUp } from '../auth/useAuth';
 
 /**
  * Sign in.

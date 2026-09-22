@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { PHASES } from './types.js';
+import { PHASES } from './types';
 
 /**
  * The wire contract for an authored workout.

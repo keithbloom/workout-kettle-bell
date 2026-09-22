@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { api } from '../api/client.js';
-import { flush, pending } from './outbox.js';
+import { api } from '../api/client';
+import { flush, pending } from './outbox';
 
 /** How many finished sessions are still on the device only. */
 export const OUTBOX_KEY = ['outbox'] as const;

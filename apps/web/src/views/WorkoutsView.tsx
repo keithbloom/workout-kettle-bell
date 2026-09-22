@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
-import { useHistory, useWorkouts } from '../api/queries.js';
-import { plural } from '../lib/format.js';
+import { useHistory, useWorkouts } from '../api/queries';
+import { plural } from '../lib/format';
 
 /** The workouts you can run: the built-in templates, plus your own. */
 export function WorkoutsView() {

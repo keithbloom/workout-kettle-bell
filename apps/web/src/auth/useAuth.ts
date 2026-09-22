@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ApiError, api } from '../api/client.js';
+import { ApiError, api } from '../api/client';
 
 /**
  * Who is signed in, if anyone.

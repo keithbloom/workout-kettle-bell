@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import legacyRun from './fixtures/legacy-steps.json' with { type: 'json' };
-import { compileWorkout } from '../src/compile-workout.js';
-import { SEED_EXERCISES } from '../src/seed/exercises.js';
-import { KETTLEBELL_AND_MAT } from '../src/seed/kettlebell-and-mat.js';
-import type { Step } from '../src/types.js';
+import { compileWorkout } from '../src/compile-workout';
+import { SEED_EXERCISES } from '../src/seed/exercises';
+import { KETTLEBELL_AND_MAT } from '../src/seed/kettlebell-and-mat';
+import type { Step } from '../src/types';
 
 /**
  * Proves the rewrite did not quietly change the workout.

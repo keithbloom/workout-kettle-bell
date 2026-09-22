@@ -12,7 +12,7 @@ import {
   toggleTask,
   togglePause,
   type SessionEvent,
-} from './session.js';
+} from './session';
 
 const T0 = 1_000_000;
 

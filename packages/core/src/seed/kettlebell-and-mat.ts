@@ -1,4 +1,4 @@
-import type { WorkoutDefinition } from '../types.js';
+import type { WorkoutDefinition } from '../types';
 
 /**
  * The original 30-minute workout, expressed entirely in the section/block

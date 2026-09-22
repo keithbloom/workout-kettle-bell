@@ -11,9 +11,9 @@
  */
 import { relations } from 'drizzle-orm';
 import { index, integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core';
-import { user } from './auth-schema.js';
+import { user } from './auth-schema';
 
-export * from './auth-schema.js';
+export * from './auth-schema';
 
 /**
  * The curated catalogue. Admin-owned: users compose workouts from these, they

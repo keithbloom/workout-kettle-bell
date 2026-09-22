@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { compileInterval, compileWorkout } from '@kb/core';
 import type { Exercise } from '@kb/core';
-import { Player } from './Player.js';
+import { Player } from './Player';
 
 /**
  * The player's behaviour as a user meets it, not its markup.

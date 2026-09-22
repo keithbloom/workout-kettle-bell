@@ -219,6 +219,14 @@ screen out of the test path while still exercising the real session cookie.
 - **The countdown only beeps on steps longer than three seconds**, or a
   three-second prep would beep from the moment it began. Ported from the
   original, and easy to lose.
+- **Relative imports have no extension** (`from './session'`). The workspace
+  is on `moduleResolution: "bundler"` and every consumer is a bundler, so the
+  `.js` suffix the ESM convention asks for bought nothing and read as though
+  the browser were loading files one by one.
+- **`@kb/core` is never built.** Its `exports` points at the TypeScript source
+  and both consumers bundle it, so there is no emit step. That also matters
+  given the line above: `tsc` would emit extensionless imports, which a plain
+  Node consumer could not resolve. `typecheck` still compiles it.
 - **`@kb/core` declares `"sideEffects": false`.** Without it a bundler keeps
   every module the barrel re-exports, so importing `compileWorkout` dragged the
   Zod contract and the seed data into the main bundle even though nothing on

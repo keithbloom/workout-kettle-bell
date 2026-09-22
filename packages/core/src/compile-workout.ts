@@ -1,4 +1,4 @@
-import { withTimings } from './timings.js';
+import { withTimings } from './timings';
 import type {
   Block,
   BlockItem,
@@ -8,7 +8,7 @@ import type {
   Section,
   Step,
   WorkoutDefinition,
-} from './types.js';
+} from './types';
 
 export interface CompileOptions {
   /** Skip every section before this index, and re-base the timings. */

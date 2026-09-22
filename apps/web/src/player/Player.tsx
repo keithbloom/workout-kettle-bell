@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import type { CompiledWorkout } from '@kb/core';
-import { currentStep, elapsedSec, isRestTone, secondsRemaining, stepProgress } from './session.js';
-import { useSession, type FinishedSession } from './usePlayer.js';
-import { formatClock, formatDuration, plural } from '../lib/format.js';
+import { currentStep, elapsedSec, isRestTone, secondsRemaining, stepProgress } from './session';
+import { useSession, type FinishedSession } from './usePlayer';
+import { formatClock, formatDuration, plural } from '../lib/format';
 import {
   BackIcon,
   CheckIcon,
@@ -11,8 +11,8 @@ import {
   PauseIcon,
   PlayIcon,
   SoundIcon,
-} from '../components/icons.js';
-import { useSettings } from '../settings/useSettings.js';
+} from '../components/icons';
+import { useSettings } from '../settings/useSettings';
 
 const PHASE_NAMES: Record<string, string> = {
   warmup: 'Warm-up',
