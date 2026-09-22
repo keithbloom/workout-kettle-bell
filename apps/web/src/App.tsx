@@ -1,14 +1,30 @@
+import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router';
 import { useCurrentUser } from './auth/useAuth.js';
 import { useSync } from './offline/useSync.js';
 import { plural } from './lib/format.js';
-import { BuilderView } from './builder/BuilderView.js';
 import { Nav } from './components/Nav.js';
 import { SignInView } from './views/SignInView.js';
 import { SettingsView } from './views/SettingsView.js';
 import { TimerView } from './views/TimerView.js';
 import { WorkoutDetailView } from './views/WorkoutDetailView.js';
 import { WorkoutsView } from './views/WorkoutsView.js';
+
+/*
+ * The builder is loaded on demand. It pulls in the Zod contract, which is the
+ * single largest thing in the bundle, and most visits are someone running a
+ * workout rather than writing one. Its chunk is still precached by the service
+ * worker, so building a workout offline keeps working.
+ */
+const BuilderView = lazy(() =>
+  import('./builder/BuilderView.js').then((m) => ({ default: m.BuilderView })),
+);
+
+const Loading = () => (
+  <section className="view">
+    <p className="status">Loading…</p>
+  </section>
+);
 
 /**
  * Sign-in is required, so the whole app is either the sign-in screen or the
@@ -47,10 +63,31 @@ export function App() {
       <main>
         <Routes>
           <Route path="/" element={<WorkoutsView />} />
-          <Route path="/workouts/new" element={<BuilderView mode="new" />} />
+          <Route
+            path="/workouts/new"
+            element={
+              <Suspense fallback={<Loading />}>
+                <BuilderView mode="new" />
+              </Suspense>
+            }
+          />
           <Route path="/workouts/:id" element={<WorkoutDetailView />} />
-          <Route path="/workouts/:id/edit" element={<BuilderView mode="edit" />} />
-          <Route path="/workouts/:id/copy" element={<BuilderView mode="copy" />} />
+          <Route
+            path="/workouts/:id/edit"
+            element={
+              <Suspense fallback={<Loading />}>
+                <BuilderView mode="edit" />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/workouts/:id/copy"
+            element={
+              <Suspense fallback={<Loading />}>
+                <BuilderView mode="copy" />
+              </Suspense>
+            }
+          />
           <Route path="/timer" element={<TimerView />} />
           <Route path="/settings" element={<SettingsView />} />
           <Route

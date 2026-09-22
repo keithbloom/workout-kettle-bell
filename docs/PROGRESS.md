@@ -219,6 +219,15 @@ screen out of the test path while still exercising the real session cookie.
 - **The countdown only beeps on steps longer than three seconds**, or a
   three-second prep would beep from the moment it began. Ported from the
   original, and easy to lose.
+- **`@kb/core` declares `"sideEffects": false`.** Without it a bundler keeps
+  every module the barrel re-exports, so importing `compileWorkout` dragged the
+  Zod contract and the seed data into the main bundle even though nothing on
+  that path used them. Any new package in the workspace wants the same
+  declaration — everything here is pure.
+- **The builder is a lazily loaded chunk**, because it is the only thing that
+  needs Zod and most visits are someone running a workout, not writing one.
+  First load is 103 KB gzipped rather than 130 KB. The service worker precaches
+  every chunk, so it still opens offline; there is a test for exactly that.
 - **`APP_URL` is a comma-separated list of origins.** Better Auth checks the
   Origin and the `callbackURL` against it, and rejects anything else with
   `Invalid callbackURL` — which does not obviously point at a port. Local

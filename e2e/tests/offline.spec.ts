@@ -73,6 +73,22 @@ test('keeps a session finished offline, and syncs it on reconnect', async ({ pag
   await expect(page.getByText(/1 session this week/)).toBeVisible();
 });
 
+/*
+ * The builder is a lazily loaded chunk, so it is the one screen that needs a
+ * second request to appear. The service worker precaches every chunk, which is
+ * what makes that safe — this test is here to keep it that way.
+ */
+test('opens the builder with no connection', async ({ page, context }) => {
+  await warmTheCache(page);
+  await context.setOffline(true);
+  await page.reload();
+
+  await page.goto('/workouts/new');
+
+  await expect(page.getByRole('heading', { name: 'New workout' })).toBeVisible();
+  await expect(page.getByLabel('Name', { exact: true })).toBeVisible();
+});
+
 test('does not lose a session when the tab is closed before reconnecting', async ({
   page,
   context,
