@@ -47,21 +47,11 @@ export default defineConfig({
       },
     }),
   ],
-  // The preview server serves the production build, service worker and all.
-  // The end-to-end tests run against this rather than the dev server, because
-  // offline behaviour only exists once the app has been built.
-  preview: {
-    port: 4173,
-    proxy: {
-      '/api': { target: 'http://localhost:8787', changeOrigin: true },
-    },
-  },
-
   server: {
     port: 5173,
-    // The API runs as a separate Worker on 8787. Proxying in development keeps
-    // the browser on one origin, so session cookies behave as they will in
-    // production without any CORS special-casing in dev.
+    // In production one Worker serves both this app and the API. Proxying in
+    // development reproduces that: the browser stays on a single origin, so
+    // cookies behave the same way here as they will once deployed.
     proxy: {
       '/api': {
         target: 'http://localhost:8787',

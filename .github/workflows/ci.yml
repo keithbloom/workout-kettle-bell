@@ -65,6 +65,7 @@ jobs:
           GOOGLE_CLIENT_ID="ci-placeholder"
           GOOGLE_CLIENT_SECRET="ci-placeholder"
           TEST_AUTH_ENABLED="true"
+          APP_URL="http://localhost:5173,http://localhost:8787"
           VARS
 
       - name: Install Playwright browser

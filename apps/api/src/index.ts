@@ -1,19 +1,18 @@
 import { Hono } from 'hono';
-import { cors } from 'hono/cors';
-import { appOrigins, createAuth } from './auth.js';
+import { createAuth } from './auth.js';
 import type { Env } from './env.js';
 import { api } from './routes/api.js';
 
+/**
+ * The whole application: this Worker serves the built web app as static assets
+ * and handles /api itself, so the browser only ever talks to one origin.
+ *
+ * That is why there is no CORS middleware here. There is no cross-origin
+ * request to permit — in development the Vite proxy keeps the browser on one
+ * origin too — and the session cookie is an ordinary first-party cookie rather
+ * than the kind browsers increasingly refuse.
+ */
 const app = new Hono<{ Bindings: Env }>();
-
-app.use('/api/*', (c, next) =>
-  cors({
-    origin: appOrigins(c.env),
-    credentials: true,
-    allowHeaders: ['Content-Type'],
-    allowMethods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-  })(c, next),
-);
 
 app.get('/api/health', (c) => c.json({ ok: true }));
 

@@ -1,6 +1,6 @@
 # Where the rewrite has got to
 
-Last updated 2026-09-21, end of phase 5.
+Last updated 2026-09-22, phase 6 in progress.
 
 The approved plan is [`plan.md`](plan.md). This file records what is actually
 built, what was decided along the way, and what to do next — so a session
@@ -17,7 +17,8 @@ app keeps working. Nothing merged to `main` yet.
 - **Phase 3 — front end: done.** `apps/web`, plus the Playwright suite.
 - **Phase 4 — the workout builder: done.** Build, edit, copy and delete.
 - **Phase 5 — offline and sync: done.** Installable, runs without a signal.
-- **Phase 6 — deploy: not started.** This is the next piece of work.
+- **Phase 6 — deploy: ready, waiting on a Cloudflare account.** Everything is
+  wired; see "Deploying" below for the handful of commands only you can run.
 
 194 unit and integration tests, and 19 end-to-end tests against the built app.
 `pnpm lint`, `pnpm format:check` and `pnpm typecheck` are clean.
@@ -141,12 +142,43 @@ The API upserts on `(user_id, client_id)`, so a replayed flush is a no-op. A
 4xx is treated as permanent and the session is dropped, because retrying cannot
 help and one unacceptable session would otherwise block the queue forever.
 
+### One Worker, one origin
+
+Decided 2026-09-22: everything is hosted on Cloudflare, on `*.workers.dev`, and
+GitHub Pages goes away.
+
+This is **one Worker**, not the Pages-plus-Workers split the original plan
+assumed. The Worker serves the built web app as static assets and handles
+`/api` itself:
+
+```jsonc
+"assets": {
+  "directory": "../web/dist",
+  "not_found_handling": "single-page-application",
+  "run_worker_first": ["/api/*"]
+}
+```
+
+Everything that is a file is served straight from the asset store without
+waking the Worker; `/api/*` goes to the handler; anything else returns the app
+so client-side routing works.
+
+This is simpler — one deploy, one URL, one config — and it settles the
+same-origin question by removing it. The session cookie is an ordinary
+first-party cookie, and there is no CORS middleware because there is no
+cross-origin request to permit. In development the Vite proxy reproduces the
+same arrangement, so cookies behave identically.
+
+`apps/web/dist` must be built before wrangler packages the Worker. The deploy
+workflow and the Playwright config both do this.
+
 ### `e2e` — Playwright
 
-Drives the **built** app against the real Worker and a local D1. Built, not
-dev-served: the service worker and everything offline only exist in a
-production build, so testing the dev server would skip the lot. Playwright
-builds and starts both servers itself, so `pnpm e2e` is the whole command.
+Drives **exactly what gets deployed**: one Worker serving the built app and the
+API from a single origin, over a local D1. Built, not dev-served — the service
+worker and everything offline only exist in a production build, so testing the
+dev server would skip the lot. Playwright builds the app and starts the Worker
+itself, so `pnpm e2e` is the whole command.
 
 Tests sign in with an email and password, which keeps Google and its consent
 screen out of the test path while still exercising the real session cookie.
@@ -204,27 +236,44 @@ screen out of the test path while still exercising the real session cookie.
   to the same path is a GET, which has no route and 404s — which is exactly
   what shipped once.
 
-## Next: phase 6, deploy
+## Deploying
 
-This is the phase that needs your Cloudflare account.
+`.github/workflows/deploy.yml` runs on a push to `main`: build the app, apply
+migrations to the remote D1, deploy the Worker, then smoke-test the live URL.
 
-1. `wrangler d1 create kb-db`, and put the real id in `apps/api/wrangler.jsonc`.
-2. `wrangler secret put` for `BETTER_AUTH_SECRET`, `GOOGLE_CLIENT_ID` and
-   `GOOGLE_CLIENT_SECRET`. These never go near GitHub.
-3. A `CLOUDFLARE_API_TOKEN` as a GitHub secret — the only one CI needs.
-4. Deploy `apps/web` to Pages and `apps/api` to Workers from Actions, running
-   `wrangler d1 migrations apply --remote` before the API deploy.
-5. Set the production `APP_URL` to the single Pages origin, and add that
-   origin's `/api/auth/callback/google` to the Google client's redirect URIs.
-6. A smoke test against the deployed URL after each production deploy.
+These steps need a Cloudflare account and can only be done by hand:
 
-**Decide first:** the app and the API want to be same-origin, which is what
-makes the session cookie a plain first-party cookie. Pages and Workers are
-different hostnames by default, so this needs either a Worker route in front of
-Pages or a custom domain with both mounted. Worth settling before wiring the
-deploy.
+```sh
+pnpm --filter @kb/api exec wrangler login
+pnpm --filter @kb/api exec wrangler d1 create kb-db
+# put the printed database_id into apps/api/wrangler.jsonc
 
-Then phase 7 (retire `legacy/`). The account UI noted above is still wanted.
+pnpm --filter @kb/api exec wrangler secret put BETTER_AUTH_SECRET
+pnpm --filter @kb/api exec wrangler secret put GOOGLE_CLIENT_ID
+pnpm --filter @kb/api exec wrangler secret put GOOGLE_CLIENT_SECRET
+
+pnpm --filter @kb/web build
+pnpm --filter @kb/api exec wrangler deploy      # prints the workers.dev URL
+```
+
+Then, with the URL in hand:
+
+1. Set `APP_URL` in `apps/api/wrangler.jsonc` to it, and redeploy. Better Auth
+   checks the Origin and the OAuth `callbackURL` against this; a mismatch fails
+   sign-in with `Invalid callbackURL`.
+2. Add `<that origin>/api/auth/callback/google` to the Google client's
+   authorised redirect URIs.
+3. In GitHub: secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, and a
+   repository _variable_ `APP_URL` set to the same origin (the smoke test reads
+   it). The Google credentials never go near GitHub.
+
+## Next: phase 7, retire the old app
+
+Once the deployed app has been used for real: delete `legacy/`, turn off GitHub
+Pages, and drop the golden-fixture CI step that depends on `legacy/index.html`.
+Keep the fixture itself — it is the record of what the workout was.
+
+The account UI noted above is still wanted.
 
 ## Wanted: an account presence in the UI
 

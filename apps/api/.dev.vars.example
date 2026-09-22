@@ -8,3 +8,7 @@ GOOGLE_CLIENT_SECRET="replace-me"
 # through Google on every reload. The web app only offers that form in a dev
 # build, and production never sets this, so there is one way in for real users.
 TEST_AUTH_ENABLED="true"
+
+# Overrides the production APP_URL in wrangler.jsonc. Both local origins: the
+# Vite dev server, and this Worker (which serves the built app in tests).
+APP_URL="http://localhost:5173,http://localhost:8787"
