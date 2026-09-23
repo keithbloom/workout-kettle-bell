@@ -18,16 +18,18 @@ original single-file app, still live from `main`.
 - **Don't change the workout's behaviour by accident.**
   `packages/core/test/legacy-fidelity.test.ts` checks the compiler still
   produces the 47 steps and 1820 seconds the original app produced, against a
-  fixture generated from the original's own code. If it fails, that is a real
-  regression unless you meant it — in which case assert the change explicitly,
-  as the one existing deviation does.
+  recording taken from the original's own code before it was retired. The
+  fixture cannot be regenerated, so treat a failure as a real regression unless
+  you meant it — in which case assert the change explicitly, as the one
+  existing deviation does.
 - **TDD.** Core and the API are built test-first, against a real local D1 rather
   than mocks. Write the failing test before the code.
 - **Every private endpoint is tested twice**: that it refuses a stranger, and
   that it refuses another signed-in user's data. Ownership checks come before
   validation, so a stranger cannot probe with error messages.
-- **Generated files are not hand-edited.** The golden fixture and the seed
-  migration are both regenerated in CI and the build fails if they differ.
+- **Generated files are not hand-edited.** The seed migration is regenerated in
+  CI and the build fails if it differs. The golden fixture is not generated at
+  all any more — it is a frozen record.
 
 ## Commands
 

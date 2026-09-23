@@ -11,7 +11,6 @@ export default tseslint.config(
       '**/.wrangler/**',
       'e2e/test-results/**',
       'e2e/playwright-report/**',
-      'legacy/**',
       '**/test/fixtures/**',
     ],
   },

@@ -41,13 +41,6 @@ jobs:
       - name: Build
         run: pnpm build
 
-      # The golden fixture must stay a faithful recording of the original app
-      # rather than something edited to make a failing test pass.
-      - name: Golden fixture is unmodified
-        run: |
-          node packages/core/scripts/extract-legacy-steps.mjs
-          git diff --exit-code packages/core/test/fixtures/legacy-steps.json
-
       # The seed migration is generated from @kb/core, so it must not be
       # hand-edited either: regenerate it and expect no change.
       - name: Seed migration matches the catalogue

@@ -19,8 +19,7 @@ app keeps working. Nothing merged to `main` yet.
 - **Phase 5 — offline and sync: done.** Installable, runs without a signal.
 - **Phase 6 — deploy: live** at
   https://kettlebell-and-mat.keith-bloom.workers.dev.
-- **Phase 7 — retire the old app: not started.** Waiting on the new one being
-  used for real first.
+- **Phase 7 — retire the old app: done.** `legacy/` deleted, GitHub Pages off.
 
 194 unit and integration tests, and 19 end-to-end tests against the built app.
 `pnpm lint`, `pnpm format:check` and `pnpm typecheck` are clean.
@@ -47,13 +46,15 @@ arms").
 
 `schema.ts` is the Zod wire contract, shared by the API and the future builder.
 
-**The fidelity guarantee.** `scripts/extract-legacy-steps.mjs` slices the
-original `buildWorkout`/`finalize` out of `legacy/index.html`, runs them, and
-records the 47 steps they produce. `test/legacy-fidelity.test.ts` checks the
-new compiler still produces those steps with the same timings, labels and cues,
-totalling 1820 seconds. CI regenerates the fixture so it cannot be edited to
-make a failing test pass. **If you change the compiler, this test is the one
-that matters.**
+**The fidelity guarantee.** `test/fixtures/legacy-steps.json` records the 47
+steps the original app produced, taken by running its own
+`buildWorkout`/`finalize` before it was retired.
+`test/legacy-fidelity.test.ts` checks the compiler still produces those steps
+with the same timings, labels and cues, totalling 1820 seconds. **If you change
+the compiler, this test is the one that matters.**
+
+The fixture can no longer be regenerated — the app that produced it is gone —
+which is the point. It is evidence, not output.
 
 One deliberate behaviour change, asserted in its own test: the 15-second break
 before Endurance used to be a `rest` tacked onto Strength and is now
@@ -323,13 +324,19 @@ Then, with the URL in hand:
    repository _variable_ `APP_URL` set to the same origin (the smoke test reads
    it). The Google credentials never go near GitHub.
 
-## Next: phase 7, retire the old app
+## Next
 
-Once the deployed app has been used for real: delete `legacy/`, turn off GitHub
-Pages, and drop the golden-fixture CI step that depends on `legacy/index.html`.
-Keep the fixture itself — it is the record of what the workout was.
+Nothing planned. Outstanding items, in rough order of worth:
 
-The account UI noted above is still wanted.
+- **Scope the outbox by user**, described above.
+- **Magic-link sign-in**, so Google is not the only way in. Needs an email
+  provider; Resend's free tier is 3k/month.
+- **Groups and shared workouts**, the original reason `workouts` carries an
+  unused `organization_id`. Better Auth's organisations plugin supplies orgs,
+  members and invitations, and the ownership checks written in phase 2 widen
+  from "owner" to "owner or member".
+- **Importing the history** from the old app's `localStorage`, if you still
+  have a device with it.
 
 ## Known gap: the outbox is not scoped to a user
 
