@@ -1,4 +1,4 @@
-import { useCurrentUser, useSignOut } from '../auth/useAuth';
+import { Link } from 'react-router';
 import { useHistory } from '../api/queries';
 import { ensureAudio, playSound, speak, vibrate } from '../player/cues';
 import { useSettings, type Settings } from '../settings/useSettings';
@@ -17,9 +17,7 @@ const TOGGLES: { key: keyof Settings; label: string; hint: string }[] = [
 
 export function SettingsView() {
   const { settings, toggle } = useSettings();
-  const user = useCurrentUser();
   const history = useHistory();
-  const signOut = useSignOut();
 
   const test = () => {
     ensureAudio();
@@ -75,15 +73,10 @@ export function SettingsView() {
 
       <div className="set-block">
         <h2>Account</h2>
-        <p>{user.data ? `Signed in as ${user.data.email}.` : 'Not signed in.'}</p>
-        <button
-          type="button"
-          className="btn2"
-          onClick={() => signOut.mutate()}
-          disabled={signOut.isPending}
-        >
-          Sign out
-        </button>
+        <p>Your name, your training so far, and signing out.</p>
+        <Link to="/account" className="btn2">
+          Go to your account
+        </Link>
       </div>
     </section>
   );

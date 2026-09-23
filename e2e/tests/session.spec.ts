@@ -40,8 +40,8 @@ test('a session acquired after browsing signed out is honoured', async ({ page }
 
 test('signing out clears the session and the screen', async ({ page }) => {
   await signIn(page);
-  await page.goto('/settings');
-  await expect(page.getByRole('heading', { name: 'Settings' })).toBeVisible();
+  await page.goto('/account');
+  await expect(page.getByRole('heading', { name: 'Account' })).toBeVisible();
 
   await page.getByRole('button', { name: 'Sign out' }).click();
 

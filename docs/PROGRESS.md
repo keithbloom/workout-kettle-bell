@@ -339,26 +339,30 @@ same device, those sessions would be recorded against the new account. A
 single-person phone never hits this. Scoping the outbox by user id would fix
 it properly.
 
-## Wanted: an account presence in the UI
+## The account UI
 
-Asked for on 2026-09-21. Not built yet.
+Built 2026-09-23, as asked for.
 
-Signing in currently leaves no trace on screen — the only sign of who you are
-is a line buried in Settings. There should be:
+- **An account element** in the top corner of every signed-in screen: avatar
+  plus first name, linking to the account page.
+- **An account page** at `/account` with your name, email, what you have
+  trained, and signing out. Settings keeps only the device preferences and
+  links across.
+- **The avatar** falls back in order: the picture Google gave us (Better Auth
+  stores it on the user, and `GET /api/me` now returns it), then Gravatar, then
+  initials.
 
-- **A user element in the chrome**, visible on every screen once signed in:
-  avatar plus name, tapping through to the account page.
-- **An account page** of its own, rather than a paragraph inside Settings.
-- **The avatar from Google**, falling back to Gravatar (an MD5 of the
-  lower-cased, trimmed email against `gravatar.com/avatar/<hash>?d=…`), and
-  falling back again to initials when neither has a picture. Better Auth already
-  stores Google's picture in `user.image`, but `GET /api/me` does not return it
-  — that field needs adding to the endpoint and to `CurrentUser`.
-- **Sign out** from the account page. This already exists in Settings
-  (`useSignOut`) and would move rather than be written fresh.
+The initials are drawn first and a picture layered over them once it has
+actually loaded. Rendering the image first and falling back on error leaves an
+empty circle for as long as the request takes — and Gravatar answering "no
+picture" is a round trip like any other. A test asserts the initials appear
+within 250ms for exactly this reason; the usual five-second retry window hid
+the problem completely.
 
-Worth doing alongside or just after the builder, since the builder adds the
-first screens where "whose workout is this?" actually matters.
+Gravatar is asked for by SHA-256 of the address, which the browser hashes
+natively, rather than the older MD5 form that would mean shipping a hash
+implementation. It does send a hash of the email to a third party, and only
+happens when the provider gave us no picture.
 
 ## Still outstanding
 

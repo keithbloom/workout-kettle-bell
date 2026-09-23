@@ -3,6 +3,8 @@ import { Route, Routes } from 'react-router';
 import { useCurrentUser } from './auth/useAuth';
 import { useSync } from './offline/useSync';
 import { plural } from './lib/format';
+import { AccountLink } from './account/AccountLink';
+import { AccountView } from './account/AccountView';
 import { Nav } from './components/Nav';
 import { SignInView } from './views/SignInView';
 import { SettingsView } from './views/SettingsView';
@@ -60,6 +62,9 @@ export function App() {
           {plural(waiting, 'session')} saved on this device, waiting for a connection.
         </p>
       )}
+      <header className="topbar">
+        <AccountLink />
+      </header>
       <main>
         <Routes>
           <Route path="/" element={<WorkoutsView />} />
@@ -90,6 +95,7 @@ export function App() {
           />
           <Route path="/timer" element={<TimerView />} />
           <Route path="/settings" element={<SettingsView />} />
+          <Route path="/account" element={<AccountView />} />
           <Route
             path="*"
             element={

@@ -6,6 +6,8 @@ export interface AuthedUser {
   id: string;
   email: string;
   name: string;
+  /** Profile picture from the identity provider, when it gave us one. */
+  image: string | null;
 }
 
 export interface AuthedVars {
@@ -32,6 +34,7 @@ export const requireUser: MiddlewareHandler<{ Bindings: Env; Variables: AuthedVa
     id: session.user.id,
     email: session.user.email,
     name: session.user.name,
+    image: session.user.image ?? null,
   });
 
   await next();

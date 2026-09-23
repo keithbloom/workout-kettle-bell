@@ -98,6 +98,16 @@ describe('signed in', () => {
     expect(body.user.email).toBe(session.email);
   });
 
+  it('says whether there is a profile picture', async () => {
+    const res = await get('/api/me', session);
+
+    const body = (await res.json()) as { user: { image: string | null } };
+    // Null rather than absent: the client has to tell "no picture" from "the
+    // field was forgotten", because it falls back differently.
+    expect(body.user).toHaveProperty('image');
+    expect(body.user.image).toBeNull();
+  });
+
   it('lists the exercise catalogue', async () => {
     const res = await get('/api/exercises', session);
 

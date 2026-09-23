@@ -60,6 +60,8 @@ export interface CurrentUser {
   id: string;
   email: string;
   name: string;
+  /** Picture from the identity provider, or null when it gave us none. */
+  image: string | null;
 }
 
 export const api = {
