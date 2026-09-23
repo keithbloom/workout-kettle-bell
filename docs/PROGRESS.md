@@ -242,6 +242,16 @@ screen out of the test path while still exercising the real session cookie.
   needs Zod and most visits are someone running a workout, not writing one.
   First load is 103 KB gzipped rather than 130 KB. The service worker precaches
   every chunk, so it still opens offline; there is a test for exactly that.
+- **Cookies are SameSite=Lax, and must stay that way.** The app and the API
+  are one origin. An earlier version forced `SameSite=None` from when they were
+  going to be separate; browsers restrict None as part of phasing out
+  third-party cookies, and the symptom was a Google sign-in that completed,
+  redirected home, and left you signed out. There is a test asserting the
+  attribute.
+- **Signing out reloads the page.** `queryClient.clear()` empties the cache
+  without telling mounted components to reconsider, so the screen stayed as it
+  was and you appeared still signed in. Sign-out also deletes the persisted
+  cache, or the restored copy would put the previous user back on screen.
 - **`APP_URL` is a comma-separated list of origins.** Better Auth checks the
   Origin and the `callbackURL` against it, and rejects anything else with
   `Invalid callbackURL` — which does not obviously point at a port. Local
@@ -307,6 +317,14 @@ Pages, and drop the golden-fixture CI step that depends on `legacy/index.html`.
 Keep the fixture itself — it is the record of what the workout was.
 
 The account UI noted above is still wanted.
+
+## Known gap: the outbox is not scoped to a user
+
+Sessions waiting in the outbox carry no user id. Signing out attempts a final
+flush, but if that fails — offline, say — and somebody else then signs in on the
+same device, those sessions would be recorded against the new account. A
+single-person phone never hits this. Scoping the outbox by user id would fix
+it properly.
 
 ## Wanted: an account presence in the UI
 

@@ -6,6 +6,7 @@ import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { del, get, set } from 'idb-keyval';
 import { App } from './App';
+import { QUERY_CACHE_KEY } from './api/cache';
 import './styles.css';
 
 const DAY = 1000 * 60 * 60 * 24;
@@ -33,7 +34,7 @@ const persister = createAsyncStoragePersister({
     setItem: (key, value) => set(key, value),
     removeItem: (key) => del(key),
   },
-  key: 'kb.query-cache',
+  key: QUERY_CACHE_KEY,
   throttleTime: 2000,
 });
 

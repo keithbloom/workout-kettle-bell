@@ -81,6 +81,34 @@ describe('better auth on d1', () => {
     expect(body?.user?.email).toBe(email);
   });
 
+  /*
+   * The app and the API are one origin, so the session cookie must be
+   * SameSite=Lax. Forcing None — as an earlier version did, from when they were
+   * going to be separate origins — produces a Google sign-in that completes,
+   * redirects home, and leaves you signed out, because browsers restrict None
+   * as part of phasing out third-party cookies.
+   *
+   * Lax is still sent on the top-level navigation the OAuth callback uses,
+   * which is the only cross-site step in the flow.
+   */
+  it('sets a same-site session cookie', async () => {
+    const res = await SELF.fetch('https://api.test/api/auth/sign-up/email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: `cookie-${Date.now()}@example.com`,
+        name: 'Cookie',
+        password: 'correct-horse-battery',
+      }),
+    });
+
+    const cookie = res.headers.get('set-cookie') ?? '';
+
+    expect(cookie.toLowerCase()).not.toContain('samesite=none');
+    expect(cookie.toLowerCase()).toContain('samesite=lax');
+    expect(cookie.toLowerCase()).toContain('httponly');
+  });
+
   it('returns no session without a cookie', async () => {
     const res = await SELF.fetch('https://api.test/api/auth/get-session');
 

@@ -50,10 +50,17 @@ export function createAuth(env: Env, requestUrl: string) {
       // isn't writing to D1 on every request.
       updateAge: 60 * 60 * 24,
     },
-    advanced: {
-      // The API and the app are on different subdomains in production.
-      defaultCookieAttributes: { sameSite: 'none', secure: true },
-    },
+    /*
+     * Cookie attributes are deliberately left to Better Auth's defaults, which
+     * are SameSite=Lax and Secure over https.
+     *
+     * An earlier version forced SameSite=None, from when the app and the API
+     * were going to be separate origins. They are one Worker now, so None is
+     * both unnecessary and harmful: browsers restrict it as part of phasing out
+     * third-party cookies, and the symptom is a Google sign-in that completes,
+     * redirects home, and lands you signed out. Lax is sent on the top-level
+     * navigation the OAuth callback uses, which is what the flow needs.
+     */
   });
 }
 
