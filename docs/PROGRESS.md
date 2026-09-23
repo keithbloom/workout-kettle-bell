@@ -219,6 +219,10 @@ screen out of the test path while still exercising the real session cookie.
 - **The countdown only beeps on steps longer than three seconds**, or a
   three-second prep would beep from the moment it began. Ported from the
   original, and easy to lose.
+- **Changing `database_id` re-keys the local database.** Wrangler stores local
+  D1 state per id, so pointing at a different one silently gives you an empty
+  database until `pnpm --filter @kb/api db:migrate:local` is run again. The
+  symptom is every end-to-end test failing at once.
 - **Relative imports have no extension** (`from './session'`). The workspace
   is on `moduleResolution: "bundler"` and every consumer is a bundler, so the
   `.js` suffix the ESM convention asks for bought nothing and read as though
@@ -260,14 +264,18 @@ migrations to the remote D1, deploy the Worker, then smoke-test the live URL.
 
 These steps need a Cloudflare account and can only be done by hand:
 
+The D1 database exists (`kb-db`, id in `apps/api/wrangler.jsonc`). What remains:
+
 ```sh
 pnpm --filter @kb/api exec wrangler login
-pnpm --filter @kb/api exec wrangler d1 create kb-db
-# put the printed database_id into apps/api/wrangler.jsonc
 
+# Generate a fresh production secret; do not reuse the local one.
 pnpm --filter @kb/api exec wrangler secret put BETTER_AUTH_SECRET
 pnpm --filter @kb/api exec wrangler secret put GOOGLE_CLIENT_ID
 pnpm --filter @kb/api exec wrangler secret put GOOGLE_CLIENT_SECRET
+
+# The remote database is empty until this runs.
+pnpm --filter @kb/api exec wrangler d1 migrations apply kb-db --remote
 
 pnpm --filter @kb/web build
 pnpm --filter @kb/api exec wrangler deploy      # prints the workers.dev URL

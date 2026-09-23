@@ -24,9 +24,10 @@
     {
       "binding": "DB",
       "database_name": "kb-db",
-      // Replaced by the id from `wrangler d1 create kb-db`. Local dev ignores
-      // it and uses a sqlite file under .wrangler/.
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      // From `wrangler d1 create kb-db`. An identifier, not a credential, so it
+      // belongs in the repo. Local development ignores it and uses a sqlite
+      // file under .wrangler/.
+      "database_id": "9b9ed154-4e80-4c81-9664-28b51eac68cf",
       "migrations_dir": "migrations",
     },
   ],
