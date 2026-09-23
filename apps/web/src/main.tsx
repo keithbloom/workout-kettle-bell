@@ -5,9 +5,18 @@ import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { del, get, set } from 'idb-keyval';
+import { registerSW } from 'virtual:pwa-register';
 import { App } from './App';
 import { QUERY_CACHE_KEY } from './api/cache';
 import './styles.css';
+
+/*
+ * Take a new version as soon as it is available, reloading once it is in
+ * control. Without this the precached shell keeps serving the previous build
+ * until the second visit after a deploy, which makes a fix look like it did
+ * not work.
+ */
+registerSW({ immediate: true });
 
 const DAY = 1000 * 60 * 60 * 24;
 

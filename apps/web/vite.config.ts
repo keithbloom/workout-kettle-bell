@@ -10,6 +10,10 @@ export default defineConfig({
     tailwind(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Registered from main.tsx instead of the injected snippet, which only
+      // registers and never reloads — so a deploy took two page loads to
+      // appear and the first one silently ran the previous version.
+      injectRegister: null,
       includeAssets: ['icon-192.png', 'icon-512.png'],
       manifest: {
         name: 'Kettlebell and mat',

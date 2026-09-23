@@ -242,6 +242,13 @@ screen out of the test path while still exercising the real session cookie.
   needs Zod and most visits are someone running a workout, not writing one.
   First load is 103 KB gzipped rather than 130 KB. The service worker precaches
   every chunk, so it still opens offline; there is a test for exactly that.
+- **A deploy used to take two page loads to appear.** The precached shell kept
+  serving the previous build on the first visit after a deploy, so a fix looked
+  like it had not worked — which cost real time during the sign-in debugging.
+  The app now registers the service worker itself (`registerSW` from
+  `virtual:pwa-register`, with `injectRegister: null`) and reloads once the new
+  version takes control. When debugging anything that looks stale, check the
+  bundle filename in the page source against the one the build printed.
 - **Cookies are SameSite=Lax, and must stay that way.** The app and the API
   are one origin. An earlier version forced `SameSite=None` from when they were
   going to be separate; browsers restrict None as part of phasing out
