@@ -38,9 +38,6 @@
     //
     // Local development overrides it from .dev.vars, which takes precedence
     // over this file and lists the dev server and this Worker.
-    //
-    // TODO: set to https://kettlebell-and-mat.<your-subdomain>.workers.dev
-    // after the first deploy, then redeploy.
-    "APP_URL": "https://kettlebell-and-mat.workers.dev",
+    "APP_URL": "https://kettlebell-and-mat.keith-bloom.workers.dev",
   },
 }

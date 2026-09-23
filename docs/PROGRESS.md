@@ -17,8 +17,10 @@ app keeps working. Nothing merged to `main` yet.
 - **Phase 3 — front end: done.** `apps/web`, plus the Playwright suite.
 - **Phase 4 — the workout builder: done.** Build, edit, copy and delete.
 - **Phase 5 — offline and sync: done.** Installable, runs without a signal.
-- **Phase 6 — deploy: ready, waiting on a Cloudflare account.** Everything is
-  wired; see "Deploying" below for the handful of commands only you can run.
+- **Phase 6 — deploy: live** at
+  https://kettlebell-and-mat.keith-bloom.workers.dev.
+- **Phase 7 — retire the old app: not started.** Waiting on the new one being
+  used for real first.
 
 194 unit and integration tests, and 19 end-to-end tests against the built app.
 `pnpm lint`, `pnpm format:check` and `pnpm typecheck` are clean.
@@ -256,6 +258,12 @@ screen out of the test path while still exercising the real session cookie.
   and PKCE challenge, and hands back a URL to send the browser to. An `<a href>`
   to the same path is a GET, which has no route and 404s — which is exactly
   what shipped once.
+
+## Deployed
+
+**https://kettlebell-and-mat.keith-bloom.workers.dev**
+
+One Worker serving the built app and the API over D1, on the free tier.
 
 ## Deploying
 
