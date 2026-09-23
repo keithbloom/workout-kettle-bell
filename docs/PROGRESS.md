@@ -291,38 +291,35 @@ One Worker serving the built app and the API over D1, on the free tier.
 
 ## Deploying
 
-`.github/workflows/deploy.yml` runs on a push to `main`: build the app, apply
-migrations to the remote D1, deploy the Worker, then smoke-test the live URL.
+**Automatic.** A push to `main` builds the app, applies migrations to the remote
+D1, deploys the Worker, and smoke-tests the live URL. Roughly thirty seconds.
+`workflow_dispatch` re-runs it by hand.
 
-These steps need a Cloudflare account and can only be done by hand:
+Because every push to `main` deploys, work happens on a branch and lands when
+it is ready.
 
-The D1 database exists (`kb-db`, id in `apps/api/wrangler.jsonc`). What remains:
+Set up once, and done:
+
+- D1 database `kb-db`, its id in `apps/api/wrangler.jsonc`.
+- Worker secrets `BETTER_AUTH_SECRET`, `GOOGLE_CLIENT_ID`,
+  `GOOGLE_CLIENT_SECRET`, set with `wrangler secret put`. Never in the repo or
+  in GitHub.
+- GitHub secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, and the
+  repository variable `APP_URL` that the smoke test reads.
+- The Google OAuth client lists
+  `https://kettlebell-and-mat.keith-bloom.workers.dev/api/auth/callback/google`
+  as an authorised redirect URI.
+
+A deploy that fails with `Invalid format for Authorization header [code: 6111]`
+means the API token secret has whitespace in it, not that its permissions are
+wrong. Re-set it with the whitespace stripped.
+
+To deploy by hand:
 
 ```sh
-pnpm --filter @kb/api exec wrangler login
-
-# Generate a fresh production secret; do not reuse the local one.
-pnpm --filter @kb/api exec wrangler secret put BETTER_AUTH_SECRET
-pnpm --filter @kb/api exec wrangler secret put GOOGLE_CLIENT_ID
-pnpm --filter @kb/api exec wrangler secret put GOOGLE_CLIENT_SECRET
-
-# The remote database is empty until this runs.
-pnpm --filter @kb/api exec wrangler d1 migrations apply kb-db --remote
-
 pnpm --filter @kb/web build
-pnpm --filter @kb/api exec wrangler deploy      # prints the workers.dev URL
+pnpm --filter @kb/api exec wrangler deploy
 ```
-
-Then, with the URL in hand:
-
-1. Set `APP_URL` in `apps/api/wrangler.jsonc` to it, and redeploy. Better Auth
-   checks the Origin and the OAuth `callbackURL` against this; a mismatch fails
-   sign-in with `Invalid callbackURL`.
-2. Add `<that origin>/api/auth/callback/google` to the Google client's
-   authorised redirect URIs.
-3. In GitHub: secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, and a
-   repository _variable_ `APP_URL` set to the same origin (the smoke test reads
-   it). The Google credentials never go near GitHub.
 
 ## Next
 
