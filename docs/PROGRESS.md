@@ -242,6 +242,12 @@ screen out of the test path while still exercising the real session cookie.
   needs Zod and most visits are someone running a workout, not writing one.
   First load is 103 KB gzipped rather than 130 KB. The service worker precaches
   every chunk, so it still opens offline; there is a test for exactly that.
+- **Never persist a signed-out answer.** The `me` query is cached to IndexedDB
+  so the app opens offline, but persisting `null` meant that arriving signed
+  out recorded "nobody", and the next load restored it, treated it as fresh,
+  and showed the sign-in screen to somebody holding a valid session. `me` is
+  now persisted only when there is a user, and always revalidated on mount —
+  the cache is a fallback for a failed request, not an answer in its own right.
 - **A deploy used to take two page loads to appear.** The precached shell kept
   serving the previous build on the first visit after a deploy, so a fix looked
   like it had not worked — which cost real time during the sign-in debugging.

@@ -7,7 +7,7 @@ import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persi
 import { del, get, set } from 'idb-keyval';
 import { registerSW } from 'virtual:pwa-register';
 import { App } from './App';
-import { QUERY_CACHE_KEY } from './api/cache';
+import { QUERY_CACHE_KEY, shouldPersist } from './api/cache';
 import './styles.css';
 
 /*
@@ -55,25 +55,7 @@ createRoot(document.getElementById('root')!).render(
         persister,
         maxAge: 7 * DAY,
         dehydrateOptions: {
-          /*
-           * What a session needs to start without a signal: the workouts, the
-           * catalogue, and who is signed in.
-           *
-           * `me` has to be here. Sign-in is required, so without a cached user
-           * an offline app decides you are signed out and shows the sign-in
-           * screen — in a gym, with no way to get past it. A network failure
-           * leaves the cached user in place; a real 401 resolves to null and
-           * signs you out properly.
-           *
-           * History is left out: it is cheap to refetch, and a stale count is
-           * more confusing than none.
-           */
-          shouldDehydrateQuery: (query) => {
-            const root = query.queryKey[0];
-            return (
-              root === 'me' || root === 'workouts' || root === 'workout' || root === 'exercises'
-            );
-          },
+          shouldDehydrateQuery: (query) => shouldPersist(query.queryKey, query.state.data),
         },
       }}
     >

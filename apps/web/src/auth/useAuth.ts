@@ -23,7 +23,15 @@ export function useCurrentUser() {
       }
     },
     retry: (count, error) => !(error instanceof ApiError && error.status === 401) && count < 2,
-    staleTime: 5 * 60 * 1000,
+    /*
+     * Always ask the server who you are, even when a cached answer exists.
+     * The cache is here for the offline case: if the request fails, the
+     * restored user stays and the app still opens. But trusting a cached
+     * answer without asking meant arriving back from Google with a valid
+     * session and being shown the sign-in screen anyway.
+     */
+    staleTime: 0,
+    refetchOnMount: 'always',
   });
 }
 
